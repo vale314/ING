@@ -8,19 +8,83 @@ const { check, validationResult } = require('express-validator');
 
 const User = require('../models/User');
 
-
-// @route     GET api/auth
-// @desc      Get logged in user
+// @route     GET api/user
+// @desc      Obtener Todos users
 // @access    Private
-router.get('/', auth, async (req, res) => {
+router.get('/all', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
-    res.json(user);
+    const users = await User.find().sort({
+      date: -1
+    });
+    return res.json(users);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
+
+// @route     PUT api/user/:id
+// @desc      Actualizar User
+// @access    Private
+router.put('/:id', auth, async (req, res) => {
+  const { name, email, phone, type, password } = req.body;
+
+  const userFields = {};
+  if (name) userFields.name = name;
+  if (email) userFields.email = email;
+  if (phone) userFields.phone = phone;
+  if (type) userFields.type = type;
+
+  try {
+
+    const id = req.params.id;
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ msg: 'Error En Id' });
+    }
+
+    let contact = await User.findById(req.params.id);
+
+    if (!contact) return res.status(404).json({ msg: 'User No Encontrado' });
+
+    contact = await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: userFields },
+      { new: true }
+    );
+
+    res.json(contact);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route     DELETE api/user/:id
+// @desc      Borrar user
+// @access    Private
+router.delete('/:id', auth, async (req, res) => {
+  try {
+
+    const id = req.params.id;
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ msg: 'Error En Id' });
+    }
+    
+    let contact = await User.findById(req.params.id);
+
+    if (!contact) return res.status(404).json({ msg: 'User No Encontrado' });
+
+    await User.findByIdAndRemove(req.params.id);
+
+    res.json({ msg: 'User Eliminado' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 
 // @route     POST api/auth Ingresar LOGIN
 // @desc      Auth user & get token

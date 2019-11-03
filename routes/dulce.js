@@ -5,6 +5,85 @@ const { check, validationResult } = require('express-validator');
 
 const Dulce = require('../models/Dulce');
 
+
+// @route     GET api/dulce
+// @desc      Obtener Todos dulces
+// @access    Private
+router.get('/all', auth, async (req, res) => {
+  try {
+    const users = await Dulce.find().sort({
+      date: -1
+    });
+    return res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route     PUT api/dulce/:id
+// @desc      Actualizar Dulce
+// @access    Private
+router.put('/:id', auth, async (req, res) => {
+  const { name, cantidad, precio, categoria } = req.body;
+
+
+  const dulceFields = {};
+  if (name) dulceFields.name = name;
+  if (cantidad) dulceFields.cantidad = cantidad;
+  if (precio) dulceFields.precio = precio;
+  if (categoria) dulceFields.categoria = categoria;
+
+  try {
+
+    const id = req.params.id;
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ msg: 'Error En Id' });
+    }
+
+    let contact = await Dulce.findById(req.params.id);
+
+    if (!contact) return res.status(404).json({ msg: 'Dulce No Encontrado' });
+
+    contact = await Dulce.findByIdAndUpdate(
+      req.params.id,
+      { $set: dulceFields },
+      { new: true }
+    );
+
+    res.json(contact);
+  } catch (err) {
+    console.error(er.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route     DELETE api/dulce/:id
+// @desc      Borrar dulce
+// @access    Private
+router.delete('/:id', auth, async (req, res) => {
+  try {
+
+    const id = req.params.id;
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ msg: 'Error En Id' });
+    }
+    
+    let contact = await Dulce.findById(req.params.id);
+
+    if (!contact) return res.status(404).json({ msg: 'Dulce No Encontrado' });
+
+    await Dulce.findByIdAndRemove(req.params.id);
+
+    res.json({ msg: 'Dulce Alterado' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 // @route     POST api/dulce
 // @desc      Registrar Dulce
 // @access    Private

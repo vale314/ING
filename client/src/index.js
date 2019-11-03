@@ -10,7 +10,6 @@ import "./assets/scss/black-dashboard-pro-react.scss?v=1.0.0";
 import "./assets/demo/demo.css";
 import "react-notification-alert/dist/animate.css";
 
-
 import Index from "./pages/index";
 import Login from "./pages/Login";
 import SignUp from "./pages/Register";
