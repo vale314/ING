@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 
 // reactstrap components
 import {
@@ -22,11 +23,62 @@ import {
 } from "reactstrap";
 
 class SignUp extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      user:{        
+        name: '',
+        email: '',
+        phone:'',
+        password: '',
+        password2: ''
+      }
+    }
+
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
   componentDidMount() {
     document.body.classList.toggle("sign-up-page");
   }
   componentWillUnmount() {
     document.body.classList.toggle("sign-up-page");
+  }
+
+  onSubmit = e => {
+    const { name, email, phone, password, password2 } = this.state.user;
+
+    e.preventDefault();
+    if (name === '' || email === '' || password === '' || phone === '') {
+      console.log('Please enter all fields', 'danger');
+    } else if (password !== password2) {
+      console.log('Passwords do not match', 'danger');
+    } else {
+        console.log(this.state.user)
+        axios.post('/api/user/signup', this.state.user,{
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then((res)=>{
+          console.log(res.data);
+        })
+      .catch ((err) => {
+        console.log(err);
+      })
+    }
+  };
+
+  onChange(e){
+    const user = this.state.user;
+    const name = e.target.name;
+    user[name] = e.target.value;
+
+    this.setState({
+      user
+    })
+
   }
   render() {
     return (
@@ -82,14 +134,14 @@ class SignUp extends React.Component {
                     <CardTitle tag="h4">Register</CardTitle>
                   </CardHeader>
                   <CardBody>
-                    <Form className="form">
+                    <Form className="form" onSubmit={this.onSubmit} href="#">
                       <InputGroup>
                         <InputGroupAddon addonType="prepend">
                           <InputGroupText>
                             <i className="tim-icons icon-single-02" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="Full Name" type="text" />
+                        <Input placeholder="Full Name" type="name" name="name" value={this.state.user.name} onChange={this.onChange} required />
                       </InputGroup>
                       <InputGroup>
                         <InputGroupAddon addonType="prepend">
@@ -97,7 +149,16 @@ class SignUp extends React.Component {
                             <i className="tim-icons icon-email-85" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="Email" type="text" />
+                        <Input placeholder="Email" type="email" name="email" value={this.state.user.email} onChange={this.onChange} required />
+                      </InputGroup>
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="tim-icons icon-email-85" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input placeholder="Telefono" type="number" name="phone" value={this.state.user.phone} onChange={this.onChange} required 
+                        />
                       </InputGroup>
                       <InputGroup>
                         <InputGroupAddon addonType="prepend">
@@ -105,13 +166,21 @@ class SignUp extends React.Component {
                             <i className="tim-icons icon-lock-circle" />
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input placeholder="Password" type="text" />
+                        <Input placeholder="Password" type="password" name="password" value={this.state.user.password} onChange={this.onChange} required />
+                      </InputGroup>
+                      <InputGroup>
+                        <InputGroupAddon addonType="prepend">
+                          <InputGroupText>
+                            <i className="tim-icons icon-lock-circle" />
+                          </InputGroupText>
+                        </InputGroupAddon>
+                        <Input placeholder="Password" type="password" name="password2" value={this.state.user.password2} onChange={this.onChange} required />
                       </InputGroup>
                       <FormGroup check className="text-left">
                         <Label check>
                           <Input type="checkbox" />
                           <span className="form-check-sign" />I agree to the{" "}
-                          <a href="#pablo" onClick={e => e.preventDefault()}>
+                          <a onClick={e => e.preventDefault()}>
                             terms and conditions
                           </a>
                           .
@@ -123,8 +192,8 @@ class SignUp extends React.Component {
                     <Button
                       className="btn-round"
                       color="primary"
-                      href="#pablo"
-                      onClick={e => e.preventDefault()}
+                      onClick={this.onSubmit}
+                      href="#"
                       size="lg"
                     >
                       Get Started

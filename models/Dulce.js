@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const DulceSchema = mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   cantidad: {
       type:Number,

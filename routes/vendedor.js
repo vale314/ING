@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const auth = require('../middleware/auth');
+const auth_Admin = require('../middleware/auth-Admin');
 const { check, validationResult } = require('express-validator');
 
 const Vendedor = require('../models/Vendedor');
@@ -11,7 +11,7 @@ const Vendedor = require('../models/Vendedor');
 // @route     GET api/ven
 // @desc      Obtener Todos vendedores
 // @access    Private
-router.get('/all', auth, async (req, res) => {
+router.get('/all', auth_Admin, async (req, res) => {
   try {
     const users = await Vendedor.find().sort({
       date: -1
@@ -26,7 +26,7 @@ router.get('/all', auth, async (req, res) => {
 // @route     PUT api/ven/:id
 // @desc      Actualizar Vendedor
 // @access    Private
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', auth_Admin, async (req, res) => {
   const { name, email, phone, type } = req.body;
 
 
@@ -64,7 +64,7 @@ router.put('/:id', auth, async (req, res) => {
 // @route     DELETE api/ven/:id
 // @desc      Borrar vendedor
 // @access    Private
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth_Admin, async (req, res) => {
   try {
     
     const id = req.params.id;

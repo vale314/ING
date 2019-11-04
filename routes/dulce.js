@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
+const auth_AV = require('../middleware/auth-AV');
+const auth_Admin = require('../middleware/auth-Admin');
 const { check, validationResult } = require('express-validator');
 
 const Dulce = require('../models/Dulce');
@@ -24,7 +26,7 @@ router.get('/all', auth, async (req, res) => {
 // @route     PUT api/dulce/:id
 // @desc      Actualizar Dulce
 // @access    Private
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', auth_Admin, async (req, res) => {
   const { name, cantidad, precio, categoria } = req.body;
 
 
@@ -62,7 +64,7 @@ router.put('/:id', auth, async (req, res) => {
 // @route     DELETE api/dulce/:id
 // @desc      Borrar dulce
 // @access    Private
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth_Admin, async (req, res) => {
   try {
 
     const id = req.params.id;
@@ -95,7 +97,7 @@ router.post(
     check('precio','Porfavor Ingrese Un Precio').isLength({min:1}),
     check('categoria','Porfavor Ingrese Una Categoria').not().isEmpty(),
   ],
-  auth,
+  auth_Admin,
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

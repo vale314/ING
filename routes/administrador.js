@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const auth = require('../middleware/auth');
+const auth_Admin = require('../middleware/auth-Admin');
 const { check, validationResult } = require('express-validator');
 
 const Admin = require('../models/Administrador');
@@ -12,7 +12,7 @@ const Admin = require('../models/Administrador');
 // @route     GET admin/admins
 // @desc      Obtener Todos admins
 // @access    Private
-router.get('/all', auth, async (req, res) => {
+router.get('/all', auth_Admin, async (req, res) => {
   try {
     const users = await Admin.find().sort({
       date: -1
@@ -27,7 +27,7 @@ router.get('/all', auth, async (req, res) => {
 // @route     PUT api/admin/:id
 // @desc      Actualizar Admin
 // @access    Private
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', auth_Admin, async (req, res) => {
   const { name, email, type, password } = req.body;
 
   const adminFields = {};
@@ -61,7 +61,7 @@ router.put('/:id', auth, async (req, res) => {
 // @route     DELETE api/admin/:id
 // @desc      Borrar admin
 // @access    Private
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth_Admin, async (req, res) => {
   try {
     const id = req.params.id;
 
