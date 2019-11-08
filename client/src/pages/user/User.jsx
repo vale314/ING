@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from 'react-redux';
+import { loadUser } from '../../actions/authActions';
 
 // reactstrap components
 import {
@@ -17,6 +19,10 @@ import {
 } from "reactstrap";
 
 class User extends React.Component {
+  componentWillMount(){
+    this.props.loadUser();
+    // eslint-disable-next-line
+  }
   render() {
     return (
       <>
@@ -386,4 +392,4 @@ class User extends React.Component {
   }
 }
 
-export default User;
+export default connect(null, {loadUser} ) (User);

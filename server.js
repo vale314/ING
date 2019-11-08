@@ -16,10 +16,6 @@ app.use('/api/admin', require('./routes/administrador'));
 app.use('/api/ven', require('./routes/vendedor'));
 app.use('/api/dulce', require('./routes/dulce'));
 
-app.get('/', (req, res) => {
-  return res.send('Develoment');
-})
-
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
   // Set static folder

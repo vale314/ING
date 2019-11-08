@@ -1,5 +1,7 @@
 import React from "react";
-import axios from "axios";
+import { connect } from 'react-redux';
+import { register } from '../actions/authActions';
+import { withRouter } from 'react-router-dom';
 
 // reactstrap components
 import {
@@ -46,6 +48,13 @@ class SignUp extends React.Component {
     document.body.classList.toggle("sign-up-page");
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    
+    if (nextProps.isAuthenticated){
+      this.props.history.push('/user');
+    }
+  }
+
   onSubmit = e => {
     const { name, email, phone, password, password2 } = this.state.user;
 
@@ -55,18 +64,7 @@ class SignUp extends React.Component {
     } else if (password !== password2) {
       console.log('Passwords do not match', 'danger');
     } else {
-        console.log(this.state.user)
-        axios.post('/api/user/signup', this.state.user,{
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then((res)=>{
-          console.log(res.data);
-        })
-      .catch ((err) => {
-        console.log(err);
-      })
+        this.props.register(this.state.user);
     }
   };
 
@@ -180,7 +178,7 @@ class SignUp extends React.Component {
                         <Label check>
                           <Input type="checkbox" />
                           <span className="form-check-sign" />I agree to the{" "}
-                          <a onClick={e => e.preventDefault()}>
+                          <a href="/" onClick={e => e.preventDefault()}>
                             terms and conditions
                           </a>
                           .
@@ -209,4 +207,9 @@ class SignUp extends React.Component {
   }
 }
 
-export default SignUp;
+const mapStateToProps = state => ({
+  error: state.auth.error,
+  isAuthenticated: state.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps, { register })(withRouter(SignUp));

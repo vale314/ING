@@ -24,6 +24,7 @@ class Index extends React.Component {
   componentWillUnmount() {
     document.body.classList.toggle("index-page");
   }
+
   render() {
     return (
       <>
@@ -31,7 +32,7 @@ class Index extends React.Component {
           <Container>
             <Row>
               <Col className="ml-auto mr-auto text-center" md="6">
-                <h1 className="title">Pick the best plan for you</h1>
+                <h1 className="title">Picke the best plan for you</h1>
                 <h4 className="description">
                   You have Free Unlimited Updates and Premium Support on each
                   package.

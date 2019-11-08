@@ -8,7 +8,23 @@ const { check, validationResult } = require('express-validator');
 
 const User = require('../models/User');
 
+
+
 // @route     GET api/user
+// @desc      Obtener Tu User
+// @access    Private
+router.get('/', auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+// @route     GET api/user/all
 // @desc      Obtener Todos users
 // @access    Private
 router.get('/all', auth, async (req, res) => {

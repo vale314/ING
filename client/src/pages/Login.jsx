@@ -1,4 +1,8 @@
 import React from "react";
+import {connect} from 'react-redux';
+import {login} from '../actions/authActions';
+import {setAlert} from '../actions/alertActions';
+import { withRouter } from 'react-router-dom';
 
 // reactstrap components
 import {
@@ -18,19 +22,66 @@ import {
 } from "reactstrap";
 
 class Login extends React.Component {
+  constructor(props){
+    super(props);
+    this.state={
+      user:{
+        email:'',
+        password:''
+      }
+    };
+
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
   componentDidMount() {
     document.body.classList.toggle("login-page");
   }
   componentWillUnmount() {
     document.body.classList.toggle("login-page");
   }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    
+    if (nextProps.isAuthenticated){
+      this.props.history.push('/user');
+    }
+
+  }
+
+  onChange(e){
+    const user = this.state.user;
+    const name = e.target.name;
+    user[name] = e.target.value;
+
+    this.setState({
+      user
+    })
+
+  }
+
+  onSubmit = e => {
+
+    e.preventDefault();
+    if (this.state.user.email === '' || this.state.user.password === '') {
+      this.props.setAlert("Ingrese Email Y Contraseña","danger",3000);
+    } else {
+      const {email, password} = this.state.user;
+      this.props.login({
+        email,
+        password
+      });
+    }
+  };
+
   render() {
     return (
       <>
         <div className="content">
           <Container>
             <Col className="ml-auto mr-auto" lg="4" md="6">
-              <Form className="form">
+              <Form className="form" onSubmit={this.onSubmit}>
                 <Card className="card-login card-white">
                   <CardHeader>
                     <img
@@ -46,7 +97,7 @@ class Login extends React.Component {
                           <i className="tim-icons icon-email-85" />
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input placeholder="Email" type="text" />
+                      <Input placeholder="Email" type="text" name="email" value={this.state.user.email} onChange={this.onChange}/>
                     </InputGroup>
                     <InputGroup>
                       <InputGroupAddon addonType="prepend">
@@ -54,7 +105,7 @@ class Login extends React.Component {
                           <i className="tim-icons icon-lock-circle" />
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input placeholder="Password" type="text" />
+                      <Input placeholder="Password" type="password" name="password" value={this.state.user.password} onChange={this.onChange} />
                     </InputGroup>
                   </CardBody>
                   <CardFooter>
@@ -63,7 +114,7 @@ class Login extends React.Component {
                       className="mb-3"
                       color="primary"
                       href="#pablo"
-                      onClick={e => e.preventDefault()}
+                      onClick={this.onSubmit}
                       size="lg"
                     >
                       Get Started
@@ -101,4 +152,8 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapStateToProps = (store) => ({
+  isAuthenticated: store.auth.isAuthenticated
+});
+
+export default connect(mapStateToProps,{setAlert, login})(withRouter(Login));
