@@ -1,34 +1,34 @@
 import axios from "axios";
-import setAuthToken from '../utils/setAuthToken';
+import setAuthToken from '../../utils/setAuthToken';
 
 import {
-  REGISTER_SUCCESS,
-  REGISTER_FAIL,
-  USER_LOADED,
-  AUTH_ERROR,
-  LOGIN_SUCCESS,
-  LOGIN_FAIL,
-  LOGOUT,
-  CLEAR_ERRORS
-} from './types';
+  ADMIN_REGISTER_SUCCESS,
+  ADMIN_REGISTER_FAIL,
+  ADMIN_LOADED,
+  ADMIN_AUTH_ERROR,
+  ADMIN_LOGIN_SUCCESS,
+  ADMIN_LOGIN_FAIL,
+  ADMIN_LOGOUT,
+  ADMIN_CLEAR_ERRORS
+} from '../types';
 
 // Load User
 export const loadUser = () => (dispatch) => {
 
-    if (localStorage.tokenUser) {
-      setAuthToken(localStorage.tokenUser);
+    if (localStorage.tokenAdmin) {
+      setAuthToken(localStorage.tokenAdmin);
     }
 
-    axios.get('/api/user')
+    axios.get('/api/admin')
     .then( res =>{
 
       dispatch({
-        type: USER_LOADED,
+        type: ADMIN_LOADED,
         payload: res.data
       });
     })
     .catch(() =>{
-      dispatch({ type: AUTH_ERROR });
+      dispatch({ type: ADMIN_AUTH_ERROR });
     })
 
   };
@@ -41,18 +41,18 @@ export const loadUser = () => (dispatch) => {
       }
     };
     
-      axios.post('/api/user/signup', formData, config)
+      axios.post('/api/admin/signup', formData, config)
 
       .then(res => {
         dispatch({
-          type: REGISTER_SUCCESS,
+          type: ADMIN_REGISTER_SUCCESS,
           payload: res.data
         });
         
       })
       .catch(err => {
         dispatch({
-          type: REGISTER_FAIL,
+          type: ADMIN_REGISTER_FAIL,
           payload: err.response.data.msg
         });
           
@@ -67,11 +67,10 @@ export const login = formData => (dispatch) =>  {
       }
     };
 
-    
-      axios.post('/api/user/login', formData, config)
+      axios.post('/api/admin/login', formData, config)
       .then( res =>{
         dispatch({
-          type: LOGIN_SUCCESS,
+          type: ADMIN_LOGIN_SUCCESS,
           payload: res.data
         });
   
@@ -79,14 +78,14 @@ export const login = formData => (dispatch) =>  {
       })
       .catch( err =>{
         dispatch({
-          type: LOGIN_FAIL,
+          type: ADMIN_LOGIN_FAIL,
           payload: err.response.data.msg
         });
       })
   };
 
   // Logout
-  export const logout = () => (dispatch) =>  dispatch({ type: LOGOUT });
+  export const logout = () => (dispatch) =>  dispatch({ type: ADMIN_LOGOUT });
 
   // Clear Errors
-  export const clearErrors = () => (dispatch) =>  dispatch({ type: CLEAR_ERRORS });
+  export const clearErrors = () => (dispatch) =>  dispatch({ type: ADMIN_CLEAR_ERRORS });

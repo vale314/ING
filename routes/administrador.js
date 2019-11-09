@@ -8,6 +8,19 @@ const { check, validationResult } = require('express-validator');
 
 const Admin = require('../models/Administrador');
 
+// @route     GET api/admin
+// @desc      Obtener Tu User
+// @access    Private
+router.get('/', auth_Admin, async (req, res) => {
+  try {
+    const user = await Admin.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
 
 // @route     GET admin/admins
 // @desc      Obtener Todos admins

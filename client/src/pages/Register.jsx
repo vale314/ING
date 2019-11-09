@@ -53,6 +53,7 @@ class SignUp extends React.Component {
     if (nextProps.isAuthenticated){
       this.props.history.push('/user');
     }
+    
   }
 
   onSubmit = e => {
@@ -60,9 +61,9 @@ class SignUp extends React.Component {
 
     e.preventDefault();
     if (name === '' || email === '' || password === '' || phone === '') {
-      console.log('Please enter all fields', 'danger');
+      this.props.setAlert('Porfavor Ingree sus campos', 'danger');
     } else if (password !== password2) {
-      console.log('Passwords do not match', 'danger');
+      this.props.setAlert('Las Contraseñas No Coinciden', 'danger');
     } else {
         this.props.register(this.state.user);
     }

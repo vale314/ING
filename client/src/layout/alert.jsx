@@ -9,7 +9,7 @@ const Alert = ({alerts, removeAlert}) => {
         alerts.map( (alert) =>(     
             <div key={alert.id} className={`alert alert-${alert.type} alert-dismissible show`}>
                 <i className='fas fa-info-circle' /> {alert.msg}
-                <button type="button" class="close" aria-label="Close" onClick={ e =>{removeAlert(alert.id)}}>
+                <button type="button" className="close" aria-label="Close" onClick={ e =>{removeAlert(alert.id)}}>
                     <span aria-hidden="true">×</span>
                 </button>
             </div>
