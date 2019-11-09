@@ -24,7 +24,7 @@ import Admin from "./pages/admin/Admin";
 import PrivateRoute from './routing/privateRouteUser';
 import Alert from './layout/alert.jsx';
 import AdminLogin from './pages/admin/LoginAdmin.jsx';
-
+import AdminPrivateRoute from './routing/privateRouteAdmin';
 
 const hist = createBrowserHistory();
 
@@ -43,7 +43,7 @@ class App extends Component {
 
                   <Route path="/admin/login" exact component={AdminLogin} />
                   <Route path="/inter" exact render={props => <Vendedor />} /> 
-                  <Route path="/admin" exact render={props => <Admin />} />
+                  <AdminPrivateRoute path="/admin" exact component={Admin} />
                   <Route path="*" render={props =><h1>No Encontrado</h1>}/>
                 </Switch>
               </Fragment>

@@ -6,6 +6,9 @@ import { Line, Bar } from "react-chartjs-2";
 // react plugin for creating vector maps
 import { VectorMap } from "react-jvectormap";
 
+import {connect} from 'react-redux';
+import {loadUser} from '../../actions/admin/authActionsAdmin';
+
 // reactstrap components
 import {
   Button,
@@ -58,6 +61,12 @@ class Admin extends React.Component {
       bigChartData: "data1"
     };
   }
+
+  componentWillMount(){
+    this.props.loadUser();
+    // eslint-disable-next-line
+  }
+
   setBgChartData = name => {
     this.setState({
       bigChartData: name
@@ -1096,4 +1105,4 @@ class Admin extends React.Component {
   }
 }
 
-export default Admin;
+export default connect(null,{loadUser})(Admin);
