@@ -28,6 +28,7 @@ import AdminPrivateRoute from './routing/privateRouteAdmin';
 import loginVendedor from './pages/vendedor/loginVendedor';
 import VendedorPrivateRoute from './routing/privateRouteVendedor';
 import CRUDVendedor from './pages/admin/CRUDVendedor';
+import CRUDUser from './pages/admin/CRUDUsuarios';
 
 const hist = createBrowserHistory();
 
@@ -47,6 +48,7 @@ class App extends Component {
                   <Route path="/admin/login" exact component={AdminLogin} />
                   <AdminPrivateRoute path="/admin" exact component={Admin} />
                   <AdminPrivateRoute path="/admin/vendedor" exact component={CRUDVendedor} />
+                  <AdminPrivateRoute path="/admin/user" exact component={CRUDUser} />
 
                   <Route path="/vendedor/login" exact component={ loginVendedor} />
                   <VendedorPrivateRoute path="/vendedor" exact component={ Vendedor} /> 
