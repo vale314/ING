@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from 'react-redux'
+import { loadUser } from '../../actions/vendedor/authActionsVendedor';
 
 // reactstrap components
 import {
@@ -16,6 +18,10 @@ import {
 } from "reactstrap";
 
 class Vendedor extends React.Component {
+
+  componentWillMount(){
+    this.props.loadUser();
+  }
   render() {
     return (
       <>
@@ -169,4 +175,4 @@ class Vendedor extends React.Component {
   }
 }
 
-export default Vendedor;
+export default connect( null , {loadUser}) (Vendedor);

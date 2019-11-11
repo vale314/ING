@@ -3,30 +3,30 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const auth_Admin = require('../middleware/auth-Admin');
+const auth_Vendedor = require('../middleware/auth-Ven');
 const { check, validationResult } = require('express-validator');
 
 const Vendedor = require('../models/Vendedor');
 
-// @route     GET api/ven
-// @desc      Obtener Todos vendedores
+
+// @route     GET api/user
+// @desc      Obtener Tu User
 // @access    Private
-router.get('/all', auth_Admin, async (req, res) => {
+router.get('/', auth_Vendedor, async (req, res) => {
   try {
-    const users = await Vendedor.find().sort({
-      date: -1
-    });
-    return res.json(users);
+    const user = await Vendedor.findById(req.user.id).select('-password');
+    res.json(user);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');
   }
 });
 
-// @route     PUT api/ven/:id
+
+// @route     PUT api/vendedor/:id
 // @desc      Actualizar Vendedor
 // @access    Private
-router.put('/:id', auth_Admin, async (req, res) => {
+router.put('/:id', auth_Vendedor, async (req, res) => {
   const { name, email, phone, type } = req.body;
 
 
@@ -61,10 +61,10 @@ router.put('/:id', auth_Admin, async (req, res) => {
   }
 });
 
-// @route     DELETE api/ven/:id
+// @route     DELETE api/vendedor/:id
 // @desc      Borrar vendedor
 // @access    Private
-router.delete('/:id', auth_Admin, async (req, res) => {
+router.delete('/:id', auth_Vendedor, async (req, res) => {
   try {
     
     const id = req.params.id;
@@ -116,69 +116,6 @@ router.post(
       if (!isMatch) {
         return res.status(400).json({ msg: 'No Es Correcto' });
       }
-
-      const payload = {
-        user: {
-          id: user.id
-        }
-      };
-
-      jwt.sign(
-        payload,
-        config.get('jwtSecret'),
-        {
-          expiresIn: 360000
-        },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server Error');
-    }
-  }
-);
-
-// @route     POST api/vendedor
-// @desc      Registrar Un Vendedor
-// @access    Public
-router.post(
-  '/signup',
-  [
-    check('name', 'Porfavor Ingresa Un Nombre').not().isEmpty(),
-    check('email', 'Porfavor Ingresa Un Email Valido').isEmail(),
-    check('phone','Porfavor Ingresa Un Numero Telefonico').isLength({min:10}),
-    check('password','Porfavor Ingresa Un Password De Mas De 6 Caracteres').isLength({ min: 6 }),
-  ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
-    const { name, email, phone, password } = req.body;
-
-    try {
-      let user = await Vendedor.findOne({ email });
-
-      if (user) {
-        return res.status(400).json({ msg: 'Usuario Ya Existe' });
-      }
-
-      user = new Vendedor({
-        name,
-        email,
-        phone,
-        password
-      });
-
-      const salt = await bcrypt.genSalt(10);
-
-      user.password = await bcrypt.hash(password, salt);
-
-      await user.save();
 
       const payload = {
         user: {

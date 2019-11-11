@@ -5,12 +5,15 @@ const Ven = require('../models/Vendedor');
 
 module.exports = function(req, res, next) {
   // Get token from header
-  const token = req.header('x-auth-token');
+  const token = req.header('tokenVen');
+  const token3 = req.header('tokenAdmin');
 
   // Check if not token
-  if (!token) {
+  if (!token && !token3) {
     return res.status(401).json({ msg: 'No Token, No Autorizado, Es Denegado' });
   }
+  if(token == null)
+    token = token3;
 
   try {
     const decoded = jwt.verify(token, config.get('jwtSecret'));

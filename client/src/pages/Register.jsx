@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from 'react-redux';
 import { register } from '../actions/authActions';
+import { setAlert } from '../actions/alertActions';
 import { withRouter } from 'react-router-dom';
 
 // reactstrap components
@@ -213,4 +214,4 @@ const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated
 });
 
-export default connect(mapStateToProps, { register })(withRouter(SignUp));
+export default connect(mapStateToProps, { register, setAlert })(withRouter(SignUp));

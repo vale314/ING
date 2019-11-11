@@ -1,34 +1,34 @@
 import axios from "axios";
-import setAuthToken from '../../utils/setAuthTokenAdmin';
+import setAuthToken from '../../utils/setAuthTokenVendedor';
 
 import {
-  ADMIN_REGISTER_SUCCESS,
-  ADMIN_REGISTER_FAIL,
-  ADMIN_LOADED,
-  ADMIN_AUTH_ERROR,
-  ADMIN_LOGIN_SUCCESS,
-  ADMIN_LOGIN_FAIL,
-  ADMIN_LOGOUT,
-  ADMIN_CLEAR_ERRORS
+  VENDEDOR_REGISTER_SUCCESS,
+  VENDEDOR_REGISTER_FAIL,
+  VENDEDOR_LOADED,
+  VENDEDOR_AUTH_ERROR,
+  VENDEDOR_LOGIN_SUCCESS,
+  VENDEDOR_LOGIN_FAIL,
+  VENDEDOR_LOGOUT,
+  VENDEDOR_CLEAR_ERRORS
 } from '../types';
 
 // Load User
 export const loadUser = () => (dispatch) => {
 
-    if (localStorage.tokenAdmin) {
-      setAuthToken(localStorage.tokenAdmin);
+    if (localStorage.tokenVendedor) {
+      setAuthToken(localStorage.tokenVendedor);
     }
 
-    axios.get('/api/admin')
+    axios.get('/api/vendedor')
     .then( res =>{
 
       dispatch({
-        type: ADMIN_LOADED,
+        type: VENDEDOR_LOADED,
         payload: res.data
       });
     })
     .catch(() =>{
-      dispatch({ type: ADMIN_AUTH_ERROR });
+      dispatch({ type: VENDEDOR_AUTH_ERROR });
     })
 
   };
@@ -41,18 +41,18 @@ export const loadUser = () => (dispatch) => {
       }
     };
     
-      axios.post('/api/admin/signup', formData, config)
+      axios.post('/api/vendedor/signup', formData, config)
 
       .then(res => {
         dispatch({
-          type: ADMIN_REGISTER_SUCCESS,
+          type: VENDEDOR_REGISTER_SUCCESS,
           payload: res.data
         });
         
       })
       .catch(err => {
         dispatch({
-          type: ADMIN_REGISTER_FAIL,
+          type: VENDEDOR_REGISTER_FAIL,
           payload: err.response.data.msg
         });
           
@@ -67,10 +67,10 @@ export const login = formData => (dispatch) =>  {
       }
     };
 
-      axios.post('/api/admin/login', formData, config)
+      axios.post('/api/vendedor/login', formData, config)
       .then( res =>{
         dispatch({
-          type: ADMIN_LOGIN_SUCCESS,
+          type: VENDEDOR_LOGIN_SUCCESS,
           payload: res.data
         });
   
@@ -78,14 +78,14 @@ export const login = formData => (dispatch) =>  {
       })
       .catch( err =>{
         dispatch({
-          type: ADMIN_LOGIN_FAIL,
+          type: VENDEDOR_LOGIN_FAIL,
           payload: err.response.data.msg
         });
       })
   };
 
   // Logout
-  export const logout = () => (dispatch) =>  dispatch({ type: ADMIN_LOGOUT });
+  export const logout = () => (dispatch) =>  dispatch({ type: VENDEDOR_LOGOUT });
 
   // Clear Errors
-  export const clearErrors = () => (dispatch) =>  dispatch({ type: ADMIN_CLEAR_ERRORS });
+  export const clearErrors = () => (dispatch) =>  dispatch({ type: VENDEDOR_CLEAR_ERRORS });

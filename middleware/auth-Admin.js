@@ -4,7 +4,7 @@ const Admin = require('../models/Administrador');
 
 module.exports = function(req, res, next) {
   // Get token from header
-  const token = req.header('x-auth-token');
+  const token = req.header('tokenAdmin');
 
   // Check if not token
   if (!token) {

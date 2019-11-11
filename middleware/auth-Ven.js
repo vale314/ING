@@ -4,7 +4,7 @@ const Ven = require('../models/Vendedor');
 
 module.exports = function(req, res, next) {
   // Get token from header
-  const token = req.header('x-auth-token');
+  const token = req.header('tokenVendedor');
 
   // Check if not token
   if (!token) {
