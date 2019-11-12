@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const DulceSchema = mongoose.Schema({
   name: {
     type: String,
-    required: true,
+    required: true
+  },
+  idD:{
+    type: Number,
     unique: true
   },
   cantidad: {
@@ -14,12 +17,7 @@ const DulceSchema = mongoose.Schema({
   },
   categoria:{
     type:String
-  },
-
-  admin_id:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'administrador'
-  },
+  }
 
 });
 

@@ -23,37 +23,38 @@ import {
   Col
 } from "reactstrap";
 
-class CRUDUsuarios extends React.Component {
+class CRUDDulces extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      user:{        
+      dulce:{        
         name: '',
-        email: '',
-        phone:'',
-        password: '',
-        type:'',
-        password2: ''
+        cantidad: '',
+        precio:'',
+        categoria: '',
+        idD:''
       },
-      emailUsuario:'',
+      idDulce:'',
       disabled:true,
-      userNew:{        
+      dulceNew:{        
         name: '',
-        email: '',
-        phone:'',
-        type:'',
+        cantidad: '',
+        precio:'',
+        categoria: '',
+        idD:'',
         id:''
       },
-      dataU:[]
+      dataD:[]
     }
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     
-    this.onChangeEmail = this.onChangeEmail.bind(this);
-    this.onChangeNewUser = this.onChangeNewUser.bind(this);
-    this.onSubmitSearchUsuario = this.onSubmitSearchUsuario.bind(this);
+    this.onChangeDulce = this.onChangeDulce.bind(this);
+    this.onChangeNewDulce = this.onChangeNewDulce.bind(this);
+    this.onSumbitSearchDulce = this.onSumbitSearchDulce.bind(this);
+    this.onSubmitNewDulce = this.onSubmitNewDulce.bind(this);
     
-    this.getAllUsuarios = this.getAllUsuarios.bind(this);
+    this.getAllDulces = this.getAllDulces.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
   }
@@ -64,38 +65,36 @@ class CRUDUsuarios extends React.Component {
   }
 
   componentDidMount(){
-    this.getAllUsuarios();
+    this.getAllDulces();
   } 
 
   onSubmit = e => {
-    const { name, email, phone, type,  password, password2 } = this.state.user;
+    const { name, cantidad,  precio, categoria, idD} = this.state.dulce;
 
     e.preventDefault();
-    if (name === '' || email === '' || password === '' || phone === '' || type === '') {
+    if (name === '' || cantidad === '' || precio === '' || categoria === '' || idD === '') {
       this.props.setAlert('Porfavor Ingree sus campos', 'danger');
-    } else if (password !== password2) {
-      this.props.setAlert('Las Contraseñas No Coinciden', 'danger');
     } else {
-      axios.post('/api/admin/signupu', this.state.user, {
+      
+      axios.post('/api/admin/signupd', this.state.dulce, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
 
       .then(res => {
-        this.props.setAlert('Usuario Creado', 'danger');
+        this.props.setAlert('Dulce Creado', 'danger');
         this.setState({
-          user:{        
+          dulce:{        
             name: '',
-            email: '',
-            phone:'',
-            type:'',
-            password: '',
-            password2: ''
+            cantidad: '',
+            precio:'',
+            categoria: '',
+            idD:''
           },
 
         })
-        this.getAllUsuarios();
+        this.getAllDulces();
       })
       .catch(err => {
         if(!Array.isArray(err.response.data.errors))
@@ -114,15 +113,15 @@ class CRUDUsuarios extends React.Component {
     if (id === '') {
       this.props.setAlert('Error Para Realizar Operacion', 'danger');
     } else {
-      axios.post('/api/admin/deleteu', {id: id}, {
+      axios.post('/api/admin/deleted', {id: id}, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
 
       .then(res => {
-        this.props.setAlert('Usuario Eliminado', 'danger');
-        this.getAllUsuarios();
+        this.props.setAlert('Dulce Eliminado', 'danger');
+        this.getAllDulces();
         })
       .catch(err => {
         if(!Array.isArray(err.response.data.errors))
@@ -135,48 +134,48 @@ class CRUDUsuarios extends React.Component {
 
   handleEdit(e,a){
     this.setState({
-      emailUsuario:a.email
+      idDulce:a.idD
     },()=>{
-      this.onSubmitSearchUsuario(e);
+      this.onSumbitSearchDulce(e);
     })
     window.scroll(0,0);
   }
 
   onChange(e){
-    const user = this.state.user;
+    const dulce = this.state.dulce;
     const name = e.target.name;
-    user[name] = e.target.value;
+    dulce[name] = e.target.value;
 
     this.setState({
-      user
+      dulce
     })
   }
 
-  onChangeEmail(e){
+  onChangeDulce(e){
     const value = e.target.value;
     this.setState({
-      emailUsuario: value
+      idDulce: value
     })
   }
 
-  onChangeNewUser(e){
-    const userNew = this.state.userNew;
+  onChangeNewDulce(e){
+    const dulceNew = this.state.dulceNew;
     const name = e.target.name;
-    userNew[name] = e.target.value;
+    dulceNew[name] = e.target.value;
 
     this.setState({
-      userNew
+      dulceNew
     })
   }
 
-  onSubmitSearchUsuario = e => {
-    const { email } = this.state.emailUsuario;
+  onSumbitSearchDulce = e => {
+    const id  = this.state.idDulce;
 
     e.preventDefault();
-    if (email === '') {
+    if (id === '') {
       this.props.setAlert('Porfavor Ingree sus campos', 'danger');
     } else {
-      axios.post('/api/admin/searchu', {email: this.state.emailUsuario }, {
+      axios.post('/api/admin/searchd', {idD: this.state.idDulce }, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -184,15 +183,16 @@ class CRUDUsuarios extends React.Component {
 
       .then(res => {
           this.setState({
-            ...this.state.user,
-            userNew:{
-              email:res.data.email,
+            ...this.state.dulce,
+            dulceNew:{
               name: res.data.name,
-              phone: res.data.phone,
-              type: res.data.type,
+              cantidad: res.data.cantidad,
+              precio: res.data.precio,
+              categoria: res.data.categoria,
+              idD: res.data.idD,
               id: res.data._id
             },
-            emailUsuario:'',
+            idDulce:'',
             disabled: false
           })
       })
@@ -205,34 +205,35 @@ class CRUDUsuarios extends React.Component {
     }
   };
 
-  onSubmitNewUser = e => {
-    const { name, email, phone, type } = this.state.userNew;
+  onSubmitNewDulce = e => {
+    const { name, cantidad, precio, categoria, idD } = this.state.dulceNew;
 
     e.preventDefault();
-    if (name === '' || email === '' || phone === '' || type === '') {
+    if (name === '' || cantidad === '' || precio === '' || categoria === '' || idD === '') {
       this.props.setAlert('Porfavor Ingree sus campos', 'danger');
     } 
     else{
-      axios.post('/api/admin/updateu', this.state.userNew, {
+      axios.post('/api/admin/updated', this.state.dulceNew, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
 
       .then(res => {
-        this.props.setAlert('Usuario Actualizado', 'danger');
+        this.props.setAlert('Dulce Actualizado', 'danger');
         this.setState({
-          userNew:{        
+          dulceNew:{        
             name: '',
-            email: '',
-            phone:'',
-            type:'',
-            id: ''
+            cantidad: '',
+            precio:'',
+            categoria: '',
+            idD:'',
+            id:''
           },
 
         })
 
-        this.getAllUsuarios();
+        this.getAllDulces();
         
       })
       .catch(err => {
@@ -244,8 +245,8 @@ class CRUDUsuarios extends React.Component {
     }
   };
 
-  getAllUsuarios(){
-    axios.get('/api/admin/allu', null , {
+  getAllDulces(){
+    axios.get('/api/admin/alld', null , {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -253,7 +254,7 @@ class CRUDUsuarios extends React.Component {
 
     .then(res => {
       this.setState({
-        dataU:res.data,
+        dataD:res.data,
       })
       var result = [];
       for(var i in res.data)
@@ -275,7 +276,7 @@ class CRUDUsuarios extends React.Component {
             <Col md="6">
               <Card>
                 <CardHeader>
-                  <CardTitle tag="h4">Crear Usuario</CardTitle>
+                  <CardTitle tag="h4">Crear Dulce</CardTitle>
                 </CardHeader>
                 <CardBody>
                   <Form className="form-horizontal" onSubmit={this.onSubmit}>
@@ -283,48 +284,39 @@ class CRUDUsuarios extends React.Component {
                       <Label md="3">Nombre</Label>
                       <Col md="9">
                         <FormGroup>
-                          <Input name="name" type="text" value={this.state.user.name} onChange={this.onChange} required />
+                          <Input name="name" type="text" value={this.state.dulce.name} onChange={this.onChange} required />
                         </FormGroup>
                       </Col>
                     </Row>
                     <Row>
-                      <Label md="3">Email</Label>
+                      <Label md="3">Cantidad</Label>
                       <Col md="9">
                         <FormGroup>
-                          <Input name="email" type="email" value={this.state.user.email} onChange={this.onChange} required/>
+                          <Input name="cantidad" type="number" value={this.state.dulce.cantidad} onChange={this.onChange} required/>
                         </FormGroup>
                       </Col>
                     </Row>
                     <Row>
-                      <Label md="3">Telefono</Label>
+                      <Label md="3">Precio</Label>
                       <Col md="9">
                         <FormGroup>
-                          <Input name="phone" minLength="10" type="number" value={this.state.user.phone} onChange={this.onChange} required/>
+                          <Input name="precio" type="precio" value={this.state.dulce.precio} onChange={this.onChange} required/>
                         </FormGroup>
                       </Col>
                     </Row>
                     <Row>
-                      <Label md="3">Type</Label>
+                      <Label md="3">Categoria</Label>
                       <Col md="9">
                         <FormGroup>
-                          <Input name="type" type="text" autoComplete="true" value={this.state.user.type} onChange={this.onChange} required/>
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row></Row>
-                    <Row>
-                      <Label md="3">Contraseña</Label>
-                      <Col md="9">
-                        <FormGroup>
-                          <Input name="password" minLength="6" type="password" autoComplete="off" value={this.state.user.password} onChange={this.onChange} required/>
+                          <Input name="categoria" type="text" value={this.state.dulce.categoria} onChange={this.onChange} required/>
                         </FormGroup>
                       </Col>
                     </Row>
                     <Row>
-                      <Label md="3"> Repite La Contraseña</Label>
+                      <Label md="3"> Id </Label>
                       <Col md="9">
                         <FormGroup>
-                          <Input name="password2" type="password" minLength="6" autoComplete="off" value={this.state.user.password2} onChange={this.onChange} required/>
+                          <Input name="idD" type="number" autoComplete="off" value={this.state.dulce.idD} onChange={this.onChange} required/>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -352,15 +344,15 @@ class CRUDUsuarios extends React.Component {
             <Col md="6">
               <Card>
                 <CardHeader>
-                  <CardTitle tag="h4">Actualizar Usuario</CardTitle>
+                  <CardTitle tag="h4">Actualizar Dulce</CardTitle>
                 </CardHeader>
                 <CardBody>
                   <Form className="form-horizontal" onSubmit={this.onSubmit}>
                   <Row>
-                      <Label md="2">Buscar Por Email: </Label>
+                      <Label md="2">Buscar Por Id: </Label>
                       <Col md="8">
                         <FormGroup>
-                          <Input name="email" type="email" value={this.state.emailUsuario} onChange={this.onChangeEmail} required />
+                          <Input name="idDulce" type="text" value={this.state.idDulce} onChange={this.onChangeDulce} required />
                         </FormGroup>
                       </Col>
                       <Col md="2">
@@ -368,7 +360,7 @@ class CRUDUsuarios extends React.Component {
                           className="btn-fill"
                           color="primary"
                           type="submit"
-                          onClick={this.onSubmitSearchUsuario}
+                          onClick={this.onSumbitSearchDulce}
                         >
                           Buscar
                         </Button>
@@ -378,31 +370,31 @@ class CRUDUsuarios extends React.Component {
                       <Label md="3">Nombre</Label>
                       <Col md="9">
                         <FormGroup>
-                          <Input name="name" type="text" value={this.state.userNew.name} onChange={this.onChangeNewUser} required  disabled={this.state.disabled}/>
+                          <Input name="name" type="text" value={this.state.dulceNew.name} onChange={this.onChangeNewDulce} required  disabled={this.state.disabled}/>
                         </FormGroup>
                       </Col>
                     </Row>
                     <Row>
-                      <Label md="3">Email</Label>
+                      <Label md="3">Cantidad</Label>
                       <Col md="9">
                         <FormGroup>
-                          <Input name="email" type="email" value={this.state.userNew.email} onChange={this.onChangeNewUser} required  disabled = {(this.state.disabled)? "disabled" : ""}/>
+                          <Input name="cantidad" type="number" value={this.state.dulceNew.cantidad} onChange={this.onChangeNewDulce} required  disabled = {(this.state.disabled)? "disabled" : ""}/>
                         </FormGroup>
                       </Col>
                     </Row>
                     <Row>
-                      <Label md="3">Telefono</Label>
+                      <Label md="3">Precio</Label>
                       <Col md="9">
                         <FormGroup>
-                          <Input name="phone" minLength="10" type="number" value={this.state.userNew.phone} onChange={this.onChangeNewUser} required  disabled = {(this.state.disabled)? "disabled" : ""}/>
+                          <Input name="precio" value={this.state.dulceNew.precio} onChange={this.onChangeNewDulce} required  disabled = {(this.state.disabled)? "disabled" : ""}/>
                         </FormGroup>
                       </Col>
                     </Row>
                     <Row>
-                      <Label md="3">Type</Label>
+                      <Label md="3">Categoria</Label>
                       <Col md="9">
                         <FormGroup>
-                          <Input name="type" type="text" autoComplete="true" value={this.state.userNew.type} onChange={this.onChangeNewUser} required disabled = {(this.state.disabled)? "disabled" : ""}/>
+                          <Input name="categoria" value={this.state.dulceNew.categoria} onChange={this.onChangeNewDulce} required  disabled = {(this.state.disabled)? "disabled" : ""}/>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -417,7 +409,7 @@ class CRUDUsuarios extends React.Component {
                           className="btn-fill"
                           color="primary"
                           type="submit"
-                          onClick={this.onSubmitNewUser}
+                          onClick={this.onSubmitNewDulce}
                           disabled={this.state.disabled}
                         >
                           Actualizar
@@ -437,25 +429,29 @@ class CRUDUsuarios extends React.Component {
                 </CardHeader>
                 <CardBody>
                   <ReactTable
-                    data={this.state.dataU}
+                    data={this.state.dataD}
                     filterable
                     resizable={false}
                     columns={[
+                      {
+                        Header: "Id",
+                        accessor: "idD"
+                      },
                       {
                         Header: "Name",
                         accessor: "name"
                       },
                       {
-                        Header: "Email",
-                        accessor: "email"
+                        Header: "Cantidad",
+                        accessor: "cantidad"
                       },
                       {
-                        Header: "Phone",
-                        accessor: "phone"
+                        Header: "Categoria",
+                        accessor: "categoria"
                       },
                       {
-                        Header: "Type",
-                        accessor: "type"
+                        Header: "Precio",
+                        accessor: "precio"
                       },
                       {
                         Header: "Actions",
@@ -482,4 +478,4 @@ class CRUDUsuarios extends React.Component {
   }
 }
 
-export default connect(null, {loadUser, setAlert}) (CRUDUsuarios);
+export default connect(null, {loadUser, setAlert}) (CRUDDulces);

@@ -9,6 +9,8 @@ const { check, validationResult } = require('express-validator');
 const Admin = require('../models/Administrador');
 const Vendedor = require('../models/Vendedor');
 const User = require('../models/User');
+const Dulce = require('../models/Dulce');
+
 
 
 
@@ -614,6 +616,330 @@ router.post('/deleteu', auth_Admin, async (req, res) => {
 });
 
 
+
+// @route     POST api/admin/signupd
+// @desc      Registrar Un Dulce
+// @access    Public
+router.post(
+  '/signupd',
+  [
+    check('name', 'PorFavor Ingrese Un Nombre').not().isEmpty(),
+    check('cantidad', 'PorFavor Ingrese La Cantidad').isLength({min:1}),
+    check('precio', 'Porfavor Ingrese Un Precio Valido').isLength({min:1}),
+    check('categoria','Porfavor Ingrese La Categoria Valida').not().isEmpty(),
+    check('idD','Porfavor Ingrese Una Id Valida').not().isEmpty(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name, cantidad, precio, categoria, idD } = req.body;
+
+    try {
+      let user = await Dulce.findOne({ idD });
+
+      if (user) {
+        return res.status(400).json({ msg: 'El Dulce Ya Existe' });
+      }
+
+      user = new Dulce({
+        name,
+        cantidad,
+        precio,
+        categoria,
+        idD
+      });
+
+      await user.save();
+
+      const payload = {
+        user: {
+          id: user.id
+        }
+      };
+
+      jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        {
+          expiresIn: 360000
+        },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route     POST api/admin/searchd
+// @desc      Ingresar Un Dulce
+// @access    Public
+router.post(
+  '/searchd',
+  [
+    check('idD', 'Porfavor Ingrese Un IDD Valido').not().isEmpty(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    
+    const { idD } = req.body;
+
+    let user = await Dulce.findOne({ idD });
+
+    if (!user) {
+        return res.status(400).json({ msg: 'Incorrecto No Encontrado' });
+      }
+      res.json(user);
+  }
+);
+
+// @route     PUT api/admin/updated
+// @desc      Actualizar Dulce
+// @access    Private
+router.post('/updated', auth_Admin, async (req, res) => {
+  const { name, cantidad, precio, categoria, id, idD } = req.body;
+
+
+  const dulceFields = {};
+  if (name) dulceFields.name = name;
+  if (cantidad) dulceFields.cantidad = cantidad;
+  if (precio) dulceFields.precio = precio;
+  if (categoria) dulceFields.categoria = categoria;
+  if (idD) dulceFields.idD = idD;
+
+  try {
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ msg: 'Error En Id' });
+    }
+
+    let contact = await Dulce.findById(id);
+    
+    if (!contact) return res.status(404).json({ msg: 'Dulce No Encontrado' });
+
+    contact = await Dulce.findByIdAndUpdate(
+      id,
+      { $set: dulceFields },
+      { new: true }
+    );
+
+    res.json(contact);
+  } catch (err) {
+    console.error(er.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route     GET api/admin/alld
+// @desc      Obtener Todos Dulces
+// @access    Private
+router.get('/alld', auth_Admin, async (req, res) => {
+  try {
+    const users = await Dulce.find().sort({
+      date: -1
+    });
+    return res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+// @route     DELETE api/admin/deletev
+// @desc      Borrar vendedor
+// @access    Private
+router.post('/deleted', auth_Admin, async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ msg: 'Error En Id' });
+    }
+
+    let contact = await Dulce.findById(id);
+
+    if (!contact) return res.status(404).json({ msg: 'Dulce No Encontrado' });
+
+    await Dulce.findByIdAndRemove(id);
+
+    res.json({ msg: 'Dulce Eliminado' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+// @route     POST api/admin/signupa
+// @desc      Registrar Un Admin
+// @access    Public
+router.post(
+  '/signupa',
+  [
+    check('name', 'PorFavor Ingrese Un Nombre').not().isEmpty(),
+    check('email', 'Porfavor Ingrese Un Email Valido').isEmail(),
+    check('password','Porfavor Ingrese Una Contraseña Valida').isLength({ min: 6 }),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name, email, password } = req.body;
+
+    try {
+      let user = await Admin.findOne({ email });
+
+      if (user) {
+        return res.status(400).json({ msg: 'El Usuario Ya Existe' });
+      }
+
+      user = new Admin({
+        name,
+        email,
+        password
+      });
+
+      const salt = await bcrypt.genSalt(10);
+
+      user.password = await bcrypt.hash(password, salt);
+
+      await user.save();
+
+      const payload = {
+        user: {
+          id: user.id
+        }
+      };
+
+      jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        {
+          expiresIn: 360000
+        },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route     POST api/admin
+// @desc      Ingresar En Login
+// @access    Public
+router.post(
+  '/searcha',
+  [
+    check('email', 'Porfavor Ingrese Un Email Valido').isEmail(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    
+    const { email } = req.body;
+
+    let user = await Admin.findOne({ email }).select('-password');;
+
+      if (!user) {
+        return res.status(400).json({ msg: 'Incorrecto No Encontrado' });
+      }
+      res.json(user);
+  }
+);
+
+// @route     PUT api/vendedor/:id
+// @desc      Actualizar Vendedor
+// @access    Private
+router.post('/updatea', auth_Admin, async (req, res) => {
+  const { name, email, id } = req.body;
+
+
+  const userFields = {};
+  if (name) userFields.name = name;
+  if (email) userFields.email = email;
+
+  try {
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ msg: 'Error En Id' });
+    }
+
+    let contact = await Admin.findById(id);
+    
+    if (!contact) return res.status(404).json({ msg: 'Admin No Encontrado' });
+
+    contact = await Admin.findByIdAndUpdate(
+      id,
+      { $set: userFields },
+      { new: true }
+    );
+
+    res.json(contact);
+  } catch (err) {
+    console.error(er.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route     GET api/vendedor
+// @desc      Obtener Todos vendedores
+// @access    Private
+router.get('/alla', auth_Admin, async (req, res) => {
+  try {
+    const users = await Admin.find().sort({
+      date: -1
+    });
+    return res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+// @route     DELETE api/admin/deletev
+// @desc      Borrar vendedor
+// @access    Private
+router.post('/deletea', auth_Admin, async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ msg: 'Error En Id' });
+    }
+
+    let contact = await Admin.findById(id);
+
+    if (!contact) return res.status(404).json({ msg: 'Admin No Encontrado' });
+
+    await Admin.findByIdAndRemove(id);
+
+    res.json({ msg: 'Admin Eliminado' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 
 module.exports = router;

@@ -30,9 +30,7 @@ class CRUDUsuarios extends React.Component {
       user:{        
         name: '',
         email: '',
-        phone:'',
         password: '',
-        type:'',
         password2: ''
       },
       emailUsuario:'',
@@ -40,8 +38,6 @@ class CRUDUsuarios extends React.Component {
       userNew:{        
         name: '',
         email: '',
-        phone:'',
-        type:'',
         id:''
       },
       dataU:[]
@@ -71,25 +67,23 @@ class CRUDUsuarios extends React.Component {
     const { name, email, phone, type,  password, password2 } = this.state.user;
 
     e.preventDefault();
-    if (name === '' || email === '' || password === '' || phone === '' || type === '') {
+    if (name === '' || email === '' || password === '') {
       this.props.setAlert('Porfavor Ingree sus campos', 'danger');
     } else if (password !== password2) {
       this.props.setAlert('Las Contraseñas No Coinciden', 'danger');
     } else {
-      axios.post('/api/admin/signupu', this.state.user, {
+      axios.post('/api/admin/signupa', this.state.user, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
 
       .then(res => {
-        this.props.setAlert('Usuario Creado', 'danger');
+        this.props.setAlert('Admin Creado', 'danger');
         this.setState({
           user:{        
             name: '',
             email: '',
-            phone:'',
-            type:'',
             password: '',
             password2: ''
           },
@@ -114,14 +108,14 @@ class CRUDUsuarios extends React.Component {
     if (id === '') {
       this.props.setAlert('Error Para Realizar Operacion', 'danger');
     } else {
-      axios.post('/api/admin/deleteu', {id: id}, {
+      axios.post('/api/admin/deletea', {id: id}, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
 
       .then(res => {
-        this.props.setAlert('Usuario Eliminado', 'danger');
+        this.props.setAlert('Admin Eliminado', 'danger');
         this.getAllUsuarios();
         })
       .catch(err => {
@@ -176,7 +170,7 @@ class CRUDUsuarios extends React.Component {
     if (email === '') {
       this.props.setAlert('Porfavor Ingree sus campos', 'danger');
     } else {
-      axios.post('/api/admin/searchu', {email: this.state.emailUsuario }, {
+      axios.post('/api/admin/searcha', {email: this.state.emailUsuario }, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -188,8 +182,6 @@ class CRUDUsuarios extends React.Component {
             userNew:{
               email:res.data.email,
               name: res.data.name,
-              phone: res.data.phone,
-              type: res.data.type,
               id: res.data._id
             },
             emailUsuario:'',
@@ -206,28 +198,26 @@ class CRUDUsuarios extends React.Component {
   };
 
   onSubmitNewUser = e => {
-    const { name, email, phone, type } = this.state.userNew;
+    const { name, email } = this.state.userNew;
 
     e.preventDefault();
-    if (name === '' || email === '' || phone === '' || type === '') {
+    if (name === '' || email === '') {
       this.props.setAlert('Porfavor Ingree sus campos', 'danger');
     } 
     else{
-      axios.post('/api/admin/updateu', this.state.userNew, {
+      axios.post('/api/admin/updatea', this.state.userNew, {
         headers: {
           'Content-Type': 'application/json'
         }
       })
 
       .then(res => {
-        this.props.setAlert('Usuario Actualizado', 'danger');
+        this.props.setAlert('Admin Actualizado', 'danger');
         this.setState({
           userNew:{        
             name: '',
             email: '',
-            phone:'',
-            type:'',
-            id: ''
+            id:''
           },
 
         })
@@ -245,7 +235,7 @@ class CRUDUsuarios extends React.Component {
   };
 
   getAllUsuarios(){
-    axios.get('/api/admin/allu', null , {
+    axios.get('/api/admin/alla', null , {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -275,7 +265,7 @@ class CRUDUsuarios extends React.Component {
             <Col md="6">
               <Card>
                 <CardHeader>
-                  <CardTitle tag="h4">Crear Usuario</CardTitle>
+                  <CardTitle tag="h4">Crear Admin</CardTitle>
                 </CardHeader>
                 <CardBody>
                   <Form className="form-horizontal" onSubmit={this.onSubmit}>
@@ -295,23 +285,7 @@ class CRUDUsuarios extends React.Component {
                         </FormGroup>
                       </Col>
                     </Row>
-                    <Row>
-                      <Label md="3">Telefono</Label>
-                      <Col md="9">
-                        <FormGroup>
-                          <Input name="phone" minLength="10" type="number" value={this.state.user.phone} onChange={this.onChange} required/>
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Label md="3">Type</Label>
-                      <Col md="9">
-                        <FormGroup>
-                          <Input name="type" type="text" autoComplete="true" value={this.state.user.type} onChange={this.onChange} required/>
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row></Row>
+                    
                     <Row>
                       <Label md="3">Contraseña</Label>
                       <Col md="9">
@@ -352,7 +326,7 @@ class CRUDUsuarios extends React.Component {
             <Col md="6">
               <Card>
                 <CardHeader>
-                  <CardTitle tag="h4">Actualizar Usuario</CardTitle>
+                  <CardTitle tag="h4">Actualizar Admin</CardTitle>
                 </CardHeader>
                 <CardBody>
                   <Form className="form-horizontal" onSubmit={this.onSubmit}>
@@ -360,7 +334,7 @@ class CRUDUsuarios extends React.Component {
                       <Label md="2">Buscar Por Email: </Label>
                       <Col md="8">
                         <FormGroup>
-                          <Input name="email" type="email" value={this.state.emailUsuario} onChange={this.onChangeEmail} required />
+                          <Input name="email" type="email" value={this.state.emailAdmin} onChange={this.onChangeEmail} required />
                         </FormGroup>
                       </Col>
                       <Col md="2">
@@ -387,22 +361,6 @@ class CRUDUsuarios extends React.Component {
                       <Col md="9">
                         <FormGroup>
                           <Input name="email" type="email" value={this.state.userNew.email} onChange={this.onChangeNewUser} required  disabled = {(this.state.disabled)? "disabled" : ""}/>
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Label md="3">Telefono</Label>
-                      <Col md="9">
-                        <FormGroup>
-                          <Input name="phone" minLength="10" type="number" value={this.state.userNew.phone} onChange={this.onChangeNewUser} required  disabled = {(this.state.disabled)? "disabled" : ""}/>
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Label md="3">Type</Label>
-                      <Col md="9">
-                        <FormGroup>
-                          <Input name="type" type="text" autoComplete="true" value={this.state.userNew.type} onChange={this.onChangeNewUser} required disabled = {(this.state.disabled)? "disabled" : ""}/>
                         </FormGroup>
                       </Col>
                     </Row>
@@ -448,14 +406,6 @@ class CRUDUsuarios extends React.Component {
                       {
                         Header: "Email",
                         accessor: "email"
-                      },
-                      {
-                        Header: "Phone",
-                        accessor: "phone"
-                      },
-                      {
-                        Header: "Type",
-                        accessor: "type"
                       },
                       {
                         Header: "Actions",
