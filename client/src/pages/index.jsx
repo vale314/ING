@@ -28,7 +28,48 @@ class Index extends React.Component {
   render() {
     return (
       <>
+        
         <div className="content">
+        <div style={{
+          position: 'relative',
+          width: '100%',
+          height: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          overflow: 'hidden'}}
+          >
+            <h1  style={{
+              textAlign: 'center',
+              fontSize: '6rem',
+              fontFamily: "Cookie",
+              padding: '20px',
+              margin: '15px',
+              zIndex: '1',
+              opacity: '0.7',
+              color: 'whitesmoke'
+              }}>Welcome To CINECO</h1>
+
+            <div style={{
+              position: 'absolute',
+              top: '0',
+              left: '0',
+              width: '100%',}}>
+                <div style={{
+                  position: 'absolute',
+                  top: '0',
+                  left: '0',
+                  backgroundColor: 'lightdark',
+                  width: '100%',
+                  height: '100vh',
+                  opacity: '0.5',
+                }}></div>
+                <video autoPlay loop muted>
+                  <source type="video/mp4" src="https://r8---sn-0opoxu-jtfz.googlevideo.com/videoplayback?expire=1573551487&ei=HinKXcXIOYLyNqrSvdAE&ip=185.33.85.197&id=o-APy1kbspObANpH9PoTjzVDzW5x85qrPFJOLeCsmL_WiE&itag=399&aitags=133%2C134%2C135%2C136%2C137%2C160%2C242%2C243%2C244%2C247%2C248%2C278%2C394%2C395%2C396%2C397%2C398%2C399&source=youtube&requiressl=yes&mime=video%2Fmp4&gir=yes&clen=25266514&dur=144.143&lmt=1570837543229984&fvip=5&keepalive=yes&fexp=23842630&c=WEB&txp=3531432&sparams=expire%2Cei%2Cip%2Cid%2Caitags%2Csource%2Crequiressl%2Cmime%2Cgir%2Cclen%2Cdur%2Clmt&sig=ALgxI2wwRQIgEsR14cXeo2AWjnpJJS9YlSeOsZm1YultuUTe7W4-jAkCIQDX_k9kzGPRYvx8fhyCH8RuCL22f_wyJTCAXcf33QGoIA%3D%3D&ratebypass=yes&title=JOKER%20-%20Final%20Trailer%20-%20Now%20Playing%20In%20Theaters&cms_redirect=yes&mip=2806:102e:1c:50c1:d83:5f78:221a:6ce3&mm=31&mn=sn-0opoxu-jtfz&ms=au&mt=1573530310&mv=m&mvi=7&pl=48&usequic=no&lsparams=mip,mm,mn,ms,mv,mvi,pl,usequic&lsig=AHylml4wRgIhAPt1ExGwD6fUr9RZsT7R2kfIIXGncJIx5-3NzCB-cZuNAiEA2ym28fdcl9rZbkv7cyIjiI_1gNJ6Eb3nGteNJBXdmus=" />
+                </video>
+            </div>
+
+            </div>
           <Container>
             <Row>
               <Col className="ml-auto mr-auto text-center" md="6">
