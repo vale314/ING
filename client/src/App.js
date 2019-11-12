@@ -31,6 +31,7 @@ import CRUDVendedor from './pages/admin/CRUDVendedor';
 import CRUDUser from './pages/admin/CRUDUsuarios';
 import CRUDDulces from './pages/admin/CRUDDulces';
 import CRUDAdmin from './pages/admin/CRUDAdmin';
+import CRUDMovies from './pages/admin/CRUDMovies';
 
 const hist = createBrowserHistory();
 
@@ -53,6 +54,7 @@ class App extends Component {
                   <AdminPrivateRoute path="/admin/user" exact component={CRUDUser} />
                   <AdminPrivateRoute path="/admin/dulces" exact component={CRUDDulces} />
                   <AdminPrivateRoute path="/admin/admin" exact component={CRUDAdmin} />
+                  <AdminPrivateRoute path="/admin/peliculas" exact component={CRUDMovies} />
 
 
                   <Route path="/vendedor/login" exact component={ loginVendedor} />

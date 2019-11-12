@@ -10,6 +10,7 @@ const Admin = require('../models/Administrador');
 const Vendedor = require('../models/Vendedor');
 const User = require('../models/User');
 const Dulce = require('../models/Dulce');
+const Movie = require('../models/Peliculas');
 
 
 
@@ -935,6 +936,179 @@ router.post('/deletea', auth_Admin, async (req, res) => {
     await Admin.findByIdAndRemove(id);
 
     res.json({ msg: 'Admin Eliminado' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route     POST api/admin/signupd
+// @desc      Registrar Un Dulce
+// @access    Public
+router.post(
+  '/signupm',
+  [
+    check('name', 'PorFavor Ingrese Un Nombre').not().isEmpty(),
+    check('foto', 'PorFavor Ingrese Una Foto').not().isEmpty(),
+    check('trailer', 'Porfavor Ingrese Un Trailer').not().isEmpty(),
+    check('duracion','Porfavor Ingrese La Duracion Valida').not().isEmpty(),
+    check('sinapsis','Porfavor Ingrese Una Sinapsis Valida').not().isEmpty(),
+    check('director','Porfavor Ingrese El Director Original').not().isEmpty(),
+    check('categoria','Porfavor Ingrese La Categoria').not().isEmpty(),
+    check('ano','Porfavor Ingrese La Duracion Fecha').not().isEmpty()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { name, foto, trailer, duracion, sinapsis, director, categoria, ano } = req.body;
+
+    try {
+      let user = await Movie.findOne({ name });
+
+      if (user) {
+        return res.status(400).json({ msg: 'La Pelicula Ya Existe' });
+      }
+
+      user = new Movie({
+        name,
+        foto,
+        trailer,
+        duracion,
+        sinapsis,
+        director,
+        categoria,
+        ano
+      });
+
+      await user.save();
+
+      const payload = {
+        user: {
+          id: user.id
+        }
+      };
+
+      jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        {
+          expiresIn: 360000
+        },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route     POST api/admin/searchd
+// @desc      Ingresar Un Dulce
+// @access    Public
+router.post(
+  '/searchm',
+  [
+    check('name', 'Porfavor Ingrese Un Name Valido').not().isEmpty(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    
+    const { name } = req.body;
+
+    let user = await Movie.findOne({ name });
+
+    if (!user) {
+        return res.status(400).json({ msg: 'Incorrecto No Encontrado' });
+      }
+      res.json(user);
+  }
+);
+
+// @route     PUT api/admin/updated
+// @desc      Actualizar Dulce
+// @access    Private
+router.post('/updatem', auth_Admin, async (req, res) => {
+  const { name, foto, trailer, duracion, sinapsis, director, categoria, ano, id } = req.body;
+
+
+  const movieField = {};
+  if (name) movieField.name = name;
+  if (foto) movieField.foto = foto;
+  if (trailer) movieField.trailer = trailer;
+  if (duracion) movieField.duracion = duracion;
+  if (sinapsis) movieField.sinapsis = sinapsis;
+  if (director) movieField.director = director;
+  if (categoria) movieField.categoria = categoria;
+  if (ano) movieField.ano = ano;
+
+  try {
+
+    if(!id) return res.status(400).json({msg: 'Error En KEY'})
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ msg: 'Error En Id' });
+    }
+
+    let contact = await Movie.findById(id);
+    
+    if (!contact) return res.status(404).json({ msg: 'Movie No Encontrada' });
+
+    contact = await Movie.findByIdAndUpdate(
+      id,
+      { $set: movieField },
+      { new: true }
+    );
+
+    res.json(contact);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route     GET api/admin/alld
+// @desc      Obtener Todos Dulces
+// @access    Private
+router.get('/allm', auth_Admin, async (req, res) => {
+  try {
+    const users = await Movie.find().sort({
+      date: -1
+    });
+    return res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+
+// @route     DELETE api/admin/deletev
+// @desc      Borrar vendedor
+// @access    Private
+router.post('/deletem', auth_Admin, async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ msg: 'Error En Id' });
+    }
+
+    let contact = await Movie.findById(id);
+
+    if (!contact) return res.status(404).json({ msg: 'Movie No Encontrado' });
+
+    await Movie.findByIdAndRemove(id);
+
+    res.json({ msg: 'Movie Eliminado' });
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server Error');

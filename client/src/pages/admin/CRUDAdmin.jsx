@@ -64,7 +64,7 @@ class CRUDUsuarios extends React.Component {
   } 
 
   onSubmit = e => {
-    const { name, email, phone, type,  password, password2 } = this.state.user;
+    const { name, email, password, password2 } = this.state.user;
 
     e.preventDefault();
     if (name === '' || email === '' || password === '') {

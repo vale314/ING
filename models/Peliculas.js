@@ -3,11 +3,12 @@ const mongoose = require('mongoose');
 const PeliculaSchema = mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   foto: {
     type: String,
-    required
+    required: true
   },
   trailer:{
       type:String,
@@ -33,10 +34,6 @@ const PeliculaSchema = mongoose.Schema({
   },
   ano:{
       type: Date
-  },
-  admin_id:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'administrador'
   }
 });
 
