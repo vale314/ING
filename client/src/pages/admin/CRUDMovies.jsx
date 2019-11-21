@@ -23,7 +23,7 @@ import {
   Col
 } from "reactstrap";
 
-class CRU extends React.Component {
+class CRUDMovies extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -548,4 +548,4 @@ class CRU extends React.Component {
   }
 }
 
-export default connect(null, {loadUser, setAlert}) (CRU);
+export default connect(null, {loadUser, setAlert}) (CRUDMovies);

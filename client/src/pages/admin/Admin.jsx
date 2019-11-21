@@ -2,12 +2,15 @@ import React from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
 // react plugin used to create charts
+import axios from 'axios';
+
 import { Line, Bar } from "react-chartjs-2";
 // react plugin for creating vector maps
 import { VectorMap } from "react-jvectormap";
 
 import {connect} from 'react-redux';
 import {loadUser} from '../../actions/admin/authActionsAdmin';
+import {setAlert} from '../../actions/alertActions';
 
 // reactstrap components
 import {
@@ -58,13 +61,104 @@ class Admin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      bigChartData: "data1"
+      bigChartData: "data1",
+      users:'',
+      admins:'',
+      vendedores:'',
+      dulces:''
     };
+    this.getAllUsuarios = this.getAllUsuarios.bind(this);
+    this.getAllAdmins = this.getAllAdmins.bind(this);
+    this.getAllVendedores = this.getAllVendedores.bind(this);
+    this.getAllDulces = this.getAllDulces.bind(this);
   }
 
   componentWillMount(){
     this.props.loadUser();
     // eslint-disable-next-line
+    this.getAllUsuarios();
+    this.getAllAdmins();
+    this.getAllVendedores();
+    this.getAllDulces();
+  }
+
+  getAllUsuarios(){
+    axios.get('/api/admin/allu', null , {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    .then(res => {
+      this.setState({
+        users: res.data.length
+      })
+    })
+    .catch(err => {
+      if(!Array.isArray(err.response.data.errors))
+        this.props.setAlert(err.response.data.msg, 'danger');
+      else
+        this.props.setAlert(err.response.data.errors[0].msg, 'danger');
+    })
+  }
+  getAllDulces(){
+    axios.get('/api/admin/alld', null , {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    .then(res => {
+      this.setState({
+        dulces: res.data.length
+      })
+    })
+    .catch(err => {
+      if(!Array.isArray(err.response.data.errors))
+        this.props.setAlert(err.response.data.msg, 'danger');
+      else
+        this.props.setAlert(err.response.data.errors[0].msg, 'danger');
+    })
+  }
+
+  getAllAdmins(){
+    axios.get('/api/admin/alla', null , {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    .then(res => {
+      this.setState({
+        admins: res.data.length
+      })
+    })
+    .catch(err => {
+      if(!Array.isArray(err.response.data.errors))
+        this.props.setAlert(err.response.data.msg, 'danger');
+      else
+        this.props.setAlert(err.response.data.errors[0].msg, 'danger');
+    })
+  }
+
+  getAllVendedores(){
+    axios.get('/api/admin/allv', null , {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    .then(res => {
+      this.setState({
+        vendedores: res.data.length
+      })
+    })
+    .catch(err => {
+      if(!Array.isArray(err.response.data.errors))
+        this.props.setAlert(err.response.data.msg, 'danger');
+      else
+        this.props.setAlert(err.response.data.errors[0].msg, 'danger');
+    })
   }
 
   setBgChartData = name => {
@@ -164,13 +258,13 @@ class Admin extends React.Component {
                   <Row>
                     <Col xs="5">
                       <div className="info-icon text-center icon-warning">
-                        <i className="tim-icons icon-chat-33" />
+                      <i className="tim-icons icon-single-02" />
                       </div>
                     </Col>
                     <Col xs="7">
                       <div className="numbers">
-                        <p className="card-category">Number</p>
-                        <CardTitle tag="h3">150GB</CardTitle>
+                        <p className="card-category">vendedores</p>
+                        <CardTitle tag="h3">{this.state.vendedores}</CardTitle>
                       </div>
                     </Col>
                   </Row>
@@ -189,13 +283,13 @@ class Admin extends React.Component {
                   <Row>
                     <Col xs="5">
                       <div className="info-icon text-center icon-primary">
-                        <i className="tim-icons icon-shape-star" />
+                        <i className="tim-icons icon-single-02" />
                       </div>
                     </Col>
                     <Col xs="7">
                       <div className="numbers">
-                        <p className="card-category">Followers</p>
-                        <CardTitle tag="h3">+45k</CardTitle>
+                        <p className="card-category">ADMINISTRADORES</p>
+                        <CardTitle tag="h3">{this.state.admins}</CardTitle>
                       </div>
                     </Col>
                   </Row>
@@ -220,7 +314,7 @@ class Admin extends React.Component {
                     <Col xs="7">
                       <div className="numbers">
                         <p className="card-category">Users</p>
-                        <CardTitle tag="h3">150,000</CardTitle>
+                        <CardTitle tag="h3">{this.state.users}</CardTitle>
                       </div>
                     </Col>
                   </Row>
@@ -244,8 +338,8 @@ class Admin extends React.Component {
                     </Col>
                     <Col xs="7">
                       <div className="numbers">
-                        <p className="card-category">Errors</p>
-                        <CardTitle tag="h3">12</CardTitle>
+                        <p className="card-category">Dulces</p>
+                        <CardTitle tag="h3">{this.state.dulces}</CardTitle>
                       </div>
                     </Col>
                   </Row>
@@ -1105,4 +1199,4 @@ class Admin extends React.Component {
   }
 }
 
-export default connect(null,{loadUser})(Admin);
+export default connect(null,{loadUser, setAlert})(Admin);

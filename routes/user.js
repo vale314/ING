@@ -7,6 +7,7 @@ const auth = require('../middleware/auth');
 const { check, validationResult } = require('express-validator');
 
 const User = require('../models/User');
+const Movie = require('../models/Peliculas');
 
 
 
@@ -218,5 +219,20 @@ router.post(
     }
   }
 );
+
+// @route     GET api/admin/alld
+// @desc      Obtener Todos Dulces
+// @access    Private
+router.get('/allm', auth, async (req, res) => {
+  try {
+    const users = await Movie.find().sort({
+      date: -1
+    });
+    return res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
 
 module.exports = router;

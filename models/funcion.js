@@ -1,30 +1,34 @@
 const mongoose = require('mongoose');
 
 const FuncionSchema = mongoose.Schema({
-  name: {
+  horario:{
     type: String,
+    default: '',
     required: true
   },
   fecha: {
       type:Date,
-  },
-  hora: {
-      type:Date
+      default: Date.now()
   },
   precio:{
       type:Number
   },
+  pelicula_name:{
+    type: String,
+    default:'',
+    required: true
+  },
+  sala_num:{
+    type: String,
+    required: true
+  },
+  boletos:{
+    type: Number,
+    default: 50
+  },
   pelicula_id:{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'pelicula'
-  },
-  admin_id:{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'administrador'
-  },
-  sala_id:{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'sala'
+    ref: 'funcion'
   }
 
 });

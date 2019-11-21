@@ -11,7 +11,7 @@ const Vendedor = require('../models/Vendedor');
 const User = require('../models/User');
 const Dulce = require('../models/Dulce');
 const Movie = require('../models/Peliculas');
-
+const Funcion = require('../models/funcion');
 
 
 
@@ -1116,4 +1116,132 @@ router.post('/deletem', auth_Admin, async (req, res) => {
 });
 
 
+// @route     POST api/admin/signupf
+// @desc      Registrar Un Funcion
+// @access    Public
+router.post(
+  '/signupf',
+  [
+    check('pelicula_name', 'PorFavor Ingrese Un Nombre').not().isEmpty(),
+    check('horario', 'PorFavor Ingrese Un Horario').not().isEmpty(),
+    check('sala_num', 'Porfavor Ingrese Una Sala').not().isEmpty(),
+    check('precio','Porfavor Ingrese Un Precio').not().isEmpty(),
+    check('pelicula_id','Porfavor Ingrese Un ID').not().isEmpty()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { pelicula_name, horario, sala_num, precio, pelicula_id } = req.body;
+
+    try {
+      let user = await Funcion.findOne({ "$and": [{
+              "sala_num": sala_num
+          }, {
+              "horario": horario
+          }] 
+      });
+
+      if (user) {
+        return res.status(400).json({ msg: 'La Funcion Ya Existe' });
+      }
+      user = new Funcion({
+        pelicula_name,
+        precio,
+        pelicula_id,
+        sala_num,
+        horario
+      });
+
+      await user.save();
+
+      const payload = {
+        user: {
+          id: user.id
+        }
+      };
+
+      jwt.sign(
+        payload,
+        config.get('jwtSecret'),
+        {
+          expiresIn: 360000
+        },
+        (err, token) => {
+          if (err) throw err;
+          res.json({ token });
+        }
+      );
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
+    }
+  }
+);
+
+// @route     GET api/admin/allf
+// @desc      Obtener Todos Funciones
+// @access    Private
+router.get('/allf', auth_Admin, async (req, res) => {
+  try {
+    const users = await Funcion.find().sort({
+      date: -1
+    });
+    return res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route     DELETE api/admin/deletev
+// @desc      Borrar vendedor
+// @access    Private
+router.post('/deletef', auth_Admin, async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ msg: 'Error En Id' });
+    }
+
+    let contact = await Funcion.findById(id);
+
+    if (!contact) return res.status(404).json({ msg: 'Funcion No Encontrada' });
+
+    await Funcion.findByIdAndRemove(id);
+
+    res.json({ msg: 'Funcion Eliminada' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// @route     POST api/admin
+// @desc      Ingresar En Login
+// @access    Public
+router.post(
+  '/searchf',
+  [
+    check('id', 'Porfavor Ingrese Un ID Valido').isEmail(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    
+    const { id } = req.body;
+
+    let user = await Funcion.findById( id );
+
+      if (!user) {
+        return res.status(400).json({ msg: 'Incorrecto No Encontrado' });
+      }
+      res.json(user);
+  }
+);
 module.exports = router;
