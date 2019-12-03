@@ -1226,7 +1226,7 @@ router.post('/deletef', auth_Admin, async (req, res) => {
 router.post(
   '/searchf',
   [
-    check('id', 'Porfavor Ingrese Un ID Valido').isEmail(),
+    check('id', 'Porfavor Ingrese Un ID Valido').not().isEmpty(),
   ],
   async (req, res) => {
     const errors = validationResult(req);

@@ -8,6 +8,7 @@ const { check, validationResult } = require('express-validator');
 
 const User = require('../models/User');
 const Movie = require('../models/Peliculas');
+const Funcion = require('../models/funcion');
 
 
 
@@ -234,5 +235,33 @@ router.get('/allm', auth, async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+// @route     POST api/admin
+// @desc      Ingresar En Login
+// @access    Public
+router.post(
+  '/searchf',
+  [
+    check('name', 'Porfavor Ingrese Nombre').not().isEmpty(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    
+    const { name } = req.body;
+
+
+    let user = await Funcion.find({
+      'pelicula_name': name
+    });
+
+      if (!user) {
+        return res.status(400).json({ msg: 'Ya No Hay Funciones' });
+      }
+      res.json(user);
+  }
+);
 
 module.exports = router;

@@ -34,6 +34,8 @@ import CRUDAdmin from './pages/admin/CRUDAdmin';
 import CRUDMovies from './pages/admin/CRUDMovies';
 import UserPreliculas from './pages/user/Peliculas';
 import CRUDFunciones from './pages/admin/CRUDFunciones';
+import Footer from './layout/footer';
+import Pelicula from './pages/user/Pelicula';
 
 const hist = createBrowserHistory();
 
@@ -49,6 +51,7 @@ class App extends Component {
                   <Route path="/login" exact render={props => <Login />}/>
                   <Route path="/signup" exact render={props => <SignUp/>} />
                   <PrivateRoute path="/user" exact component={UserPreliculas} />
+                  <PrivateRoute path="/movie" exact component={Pelicula} />
                   <PrivateRoute path="/user/profile" exact component={UserProfile} />
 
                   <Route path="/admin/login" exact component={AdminLogin} />
@@ -67,6 +70,7 @@ class App extends Component {
                   <Route path="*" render={props =><h1>No Encontrado</h1>}/>
                 </Switch>
               </Fragment>
+              <Footer />
           </Router>
       </Provider>
     );

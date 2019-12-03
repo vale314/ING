@@ -45,7 +45,9 @@ class LoginVendedor extends React.Component {
   UNSAFE_componentWillReceiveProps(nextProps) {
     
     if (nextProps.isAuthenticated){
-      this.props.history.push('/vendedor');
+      this.props.history.push({
+        pathname:'/vendedor'
+      });
     }
 
   }

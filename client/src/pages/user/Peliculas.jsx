@@ -1,8 +1,9 @@
-import React from "react";
+import React, {Fragment} from "react";
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { loadUser } from '../../actions/authActions';
 import { setAlert } from '../../actions/alertActions';
+import { withRouter } from 'react-router-dom';
 
 // reactstrap components
 import {
@@ -12,6 +13,8 @@ import {
   CardBody,
   CardFooter,
   CardTitle,
+  CardImg,
+  CardText,
   Label,
   FormGroup,
   Form,
@@ -49,6 +52,8 @@ class UserPeliculas extends React.Component {
     this.state={
       activeIndex: 0,
       animating: false,
+      
+      moviesArray: []
     }
 
     this.next = this.next.bind(this);
@@ -56,11 +61,20 @@ class UserPeliculas extends React.Component {
     this.goToIndex = this.goToIndex.bind(this);
     this.onExiting = this.onExiting.bind(this);
     this.onExited = this.onExited.bind(this);
+    this.getAllMovies = this.getAllMovies.bind(this);
+    this.onClickHandler = this.onClickHandler.bind(this);
   }
-  componentWillMount(){
-    this.props.loadUser();
-    // eslint-disable-next-line
-    
+
+  onClickHandler(e, p){
+    e.preventDefault();
+
+    this.props.history.push({
+      pathname:'/movie',
+      state: p
+    });
+  }
+
+  getAllMovies(){
     axios.get('/api/user/allm', null , {
       headers: {
         'Content-Type': 'application/json'
@@ -68,15 +82,28 @@ class UserPeliculas extends React.Component {
     })
 
     .then(res => {
+      this.setState({
+        moviesArray:res.data,
+      })
       items = res.data;
-      
     })
     .catch(err => {
-      console.log(err)
-      this.props.setAlert("error","danger");
-      
+      if(!Array.isArray(err.response.data.errors))
+        this.props.setAlert(err.response.data.msg, 'danger');
+      else
+        this.props.setAlert(err.response.data.errors[0].msg, 'danger');
     })
+  }
 
+  componentWillMount(){
+    this.props.loadUser();
+    // eslint-disable-next-line
+   
+
+  }
+
+  componentDidMount(){
+    this.getAllMovies();
   }
 
   onExiting() {
@@ -106,7 +133,7 @@ class UserPeliculas extends React.Component {
 
 
   render() {
-    const { activeIndex } = this.state;
+    const { activeIndex, moviesArray } = this.state;
 
     const slides = items.map((item) => {
       return (
@@ -134,34 +161,46 @@ class UserPeliculas extends React.Component {
           <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
           <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
         </Carousel>
-        <Row>
-            <Col xs="4">
-              <Card>
-                <CardBody className="text-center py-5">
-                  <code>col-4</code>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col xs="4">
-              <Card>
-                <CardBody className="text-center py-5">
-                  <code>col-4</code>
-                </CardBody>
-              </Card>
-            </Col>
-            <Col xs="4">
-              <Card>
-                <CardBody className="text-center py-5">
-                  <code>col-4</code>
-                </CardBody>
-              </Card>
-            </Col>
+        <div className="typography-line"><h1><span>Header 1</span>Las Mejores Peliculas</h1></div>
+          <Row>
+            {
+              moviesArray.map((p, i)=>{
+                if(i%3 === 0 && i !== 0)
+                return(
+                  <Fragment key={i}>
+                    <br/>
+                    <Col xs="4">
+                    <Card style={{width: '20rem'}}>
+                    <CardImg top src={p.foto} alt="..."/>
+                    <CardTitle>{p.name}</CardTitle>
+                    <CardText>{p.sinapsis}</CardText>
+                      <Button color="primary" onClick={ e => this.onClickHandler(e, p)}>
+                        Comprar Boletos
+                        </Button>
+                    </Card>
+                    </Col>
+                  </Fragment>
+                )
+                return(
+                  <Col xs="4" key={i}>
+                  <Card style={{width: '20rem'}}>
+                  <CardImg top src={p.foto} alt="..."/>
+                  <CardTitle>{p.name}</CardTitle>
+                  <CardText>{p.sinapsis}</CardText>
+                    <Button color="primary" onClick={e => this.onClickHandler(e, p)}>
+                      Comprar Boletos
+                    </Button>
+                  </Card>
+                  </Col>
+                )
+              })
+            }
           </Row>
-        </div>
+      </div>
       </>
     );
   }
 }
 
 
-export default connect(null, {loadUser, setAlert} ) (UserPeliculas);
+export default connect(null, {loadUser, setAlert} ) (withRouter(UserPeliculas));
