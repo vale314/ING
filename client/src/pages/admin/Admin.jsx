@@ -196,7 +196,7 @@ class Admin extends React.Component {
                         >
                           <input defaultChecked name="options" type="radio" />
                           <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                            Accounts
+                            Boletos
                           </span>
                           <span className="d-block d-sm-none">
                             <i className="tim-icons icon-single-02" />
@@ -214,7 +214,7 @@ class Admin extends React.Component {
                         >
                           <input name="options" type="radio" />
                           <span className="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                            Purchases
+                            Peliculas
                           </span>
                           <span className="d-block d-sm-none">
                             <i className="tim-icons icon-gift-2" />

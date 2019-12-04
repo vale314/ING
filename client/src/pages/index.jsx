@@ -64,8 +64,8 @@ class Index extends React.Component {
                   height: '100vh',
                   opacity: '0.5',
                 }}></div>
-                <video autoPlay loop muted>
-                  <source type="video/mp4" src="https://r5---sn-q4f7sn7r.googlevideo.com/videoplayback?expire=1573600903&ei=J-rKXf6CM4HxjQTF-YPwDg&ip=154.16.210.231&id=o-APgoAf_HVByJp2YvxsWPb3HGc4moTUwJyD-ac_wErrSq&itag=399&aitags=133%2C134%2C135%2C136%2C137%2C160%2C242%2C243%2C244%2C247%2C248%2C278%2C394%2C395%2C396%2C397%2C398%2C399&source=youtube&requiressl=yes&mime=video%2Fmp4&gir=yes&clen=25266514&dur=144.143&lmt=1570837543229984&fvip=5&keepalive=yes&fexp=23842630&c=WEB&txp=3531432&sparams=expire%2Cei%2Cip%2Cid%2Caitags%2Csource%2Crequiressl%2Cmime%2Cgir%2Cclen%2Cdur%2Clmt&sig=ALgxI2wwRAIgPNxlgGlw0WM_7eybePE1lPTJ7GE6hYHqvddQuZxOWzcCIHD0ZsUMrhd4n6-0zmrOsMYYS1-hVHUKy7cbvSkcClLz&ratebypass=yes&title=JOKER%20-%20Final%20Trailer%20-%20Now%20Playing%20In%20Theaters&redirect_counter=1&cm2rm=sn-oxmuxahm-bqae7s&req_id=21fe84fe153aa3ee&cms_redirect=yes&mip=201.175.156.1&mm=29&mn=sn-q4f7sn7r&ms=rdu&mt=1573584898&mv=m&mvi=4&pl=24&lsparams=mip,mm,mn,ms,mv,mvi,pl&lsig=AHylml4wRQIge6_srSNUJyyIri6hPWNz8HXoZgGqOMjlTS_89qL2xMwCIQCjRugx453vfjgLqEeD0IOcipXBmwYQzxfpHBGhlVmWEw==" />
+                <video autoPlay loop muted style={{width: "inherit"}}>
+                  <source type="video/mp4" src="http://localhost:5000/video" />
                 </video>
             </div>
 

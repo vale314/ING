@@ -1244,4 +1244,14 @@ router.post(
       res.json(user);
   }
 );
+
+router.get(
+  '/countb',
+  auth_Admin,
+  async (req, res) => {
+    let user = await Funcion.countDocuments();
+
+    return res.json(user);
+  }
+)
 module.exports = router;

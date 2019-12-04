@@ -36,6 +36,7 @@ import UserPreliculas from './pages/user/Peliculas';
 import CRUDFunciones from './pages/admin/CRUDFunciones';
 import Footer from './layout/footer';
 import Pelicula from './pages/user/Pelicula';
+import Navbar from './layout/navbar';
 
 const hist = createBrowserHistory();
 
@@ -46,6 +47,7 @@ class App extends Component {
           <Router history={hist}>  
               <Fragment>
                 <Alert />
+                <Navbar />
                 <Switch>
                   <Route path="/" exact render={props => <Index {...props} />}/>    
                   <Route path="/login" exact render={props => <Login />}/>

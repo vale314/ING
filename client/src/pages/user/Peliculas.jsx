@@ -161,7 +161,7 @@ class UserPeliculas extends React.Component {
           <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
           <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
         </Carousel>
-        <div className="typography-line"><h1><span>Header 1</span>Las Mejores Peliculas</h1></div>
+        <div className="typography-line"><h1>Las Mejores Peliculas</h1></div>
           <Row>
             {
               moviesArray.map((p, i)=>{
@@ -172,7 +172,7 @@ class UserPeliculas extends React.Component {
                     <Col xs="4">
                     <Card style={{width: '20rem'}}>
                     <CardImg top src={p.foto} alt="..."/>
-                    <CardTitle>{p.name}</CardTitle>
+                    <CardTitle style={{fontSize: "1.1rem ", textAlign: "center"}}>{p.name}</CardTitle>
                     <CardText>{p.sinapsis}</CardText>
                       <Button color="primary" onClick={ e => this.onClickHandler(e, p)}>
                         Comprar Boletos
@@ -185,7 +185,7 @@ class UserPeliculas extends React.Component {
                   <Col xs="4" key={i}>
                   <Card style={{width: '20rem'}}>
                   <CardImg top src={p.foto} alt="..."/>
-                  <CardTitle>{p.name}</CardTitle>
+                  <CardTitle style={{fontSize: "1.1rem ", textAlign: "center"}}>{p.name}</CardTitle>
                   <CardText>{p.sinapsis}</CardText>
                     <Button color="primary" onClick={e => this.onClickHandler(e, p)}>
                       Comprar Boletos
