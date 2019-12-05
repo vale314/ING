@@ -142,7 +142,9 @@ class UserPeliculas extends React.Component {
           onExiting={this.onExiting}
           onExited={this.onExited}
           key={item.foto}
+          style={{position: 'relative'}}
         >
+
           <img className="d-block w-100" src={item.foto} alt={item.sinapsis} />
           <CarouselCaption captionText={item.name} captionHeader={item.name} />
         </CarouselItem>

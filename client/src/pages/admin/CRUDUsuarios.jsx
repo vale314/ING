@@ -434,6 +434,7 @@ class CRUDUsuarios extends React.Component {
               <Card>
                 <CardHeader>
                   <CardTitle tag="h4">React Table</CardTitle>
+                  <CardTitle tag="h4">Usuarios</CardTitle>
                 </CardHeader>
                 <CardBody>
                   <ReactTable

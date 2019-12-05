@@ -225,12 +225,18 @@
 
 .carousel-caption {
   position: absolute;
-  right: ((100% - $carousel-caption-width) / 2);
+  right: 15%;
   bottom: 20px;
-  left: ((100% - $carousel-caption-width) / 2);
+  left: 15%;
   z-index: 10;
   padding-top: 20px;
   padding-bottom: 20px;
-  color: $carousel-caption-color;
-  text-align: center;
+  /*color: #ffffff;*/
+  text-align: center; 
+
+  font-size: 6rem;
+  font-family: Cookie;
+  opacity: 0.7;
+  color: whitesmoke !important;
+  background-color:  whitesmoke;
 }

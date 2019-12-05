@@ -63,7 +63,7 @@ let chart_1_2_3_options = {
   
       return {
         labels: [
-          "JAN",
+          "ENE",
           "FEB",
           "MAR",
           "APR",
@@ -108,7 +108,7 @@ let chart_1_2_3_options = {
   
       return {
         labels: [
-          "JAN",
+          "ENE",
           "FEB",
           "MAR",
           "APR",
@@ -153,7 +153,7 @@ let chart_1_2_3_options = {
   
       return {
         labels: [
-          "JAN",
+          "ENE",
           "FEB",
           "MAR",
           "APR",

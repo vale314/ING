@@ -356,6 +356,7 @@ class Vendedor extends React.Component {
               <Card>
                 <CardHeader>
                   <CardTitle tag="h4">React Table</CardTitle>
+                  <CardTitle tag="h4">Funciones</CardTitle>
                 </CardHeader>
                 <CardBody>
                   <ReactTable

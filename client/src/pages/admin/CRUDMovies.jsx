@@ -500,6 +500,7 @@ class CRUDMovies extends React.Component {
               <Card>
                 <CardHeader>
                   <CardTitle tag="h4">React Table</CardTitle>
+                  <CardTitle tag="h4">Peliculas</CardTitle>
                 </CardHeader>
                 <CardBody>
                   <ReactTable

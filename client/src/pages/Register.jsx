@@ -92,10 +92,10 @@ class SignUp extends React.Component {
                     <i className="tim-icons icon-wifi" />
                   </div>
                   <div className="description">
-                    <h3 className="info-title">Marketing</h3>
+                    <h3 className="info-title">Movies</h3>
                     <p className="description">
-                      We've created the marketing campaign of the website. It
-                      was a very interesting collaboration.
+                      Disfruta de las mejores peliculas que podras imaginar.
+                      Esto al mejor precio solo aqui.
                     </p>
                   </div>
                 </div>
@@ -104,10 +104,10 @@ class SignUp extends React.Component {
                     <i className="tim-icons icon-triangle-right-17" />
                   </div>
                   <div className="description">
-                    <h3 className="info-title">Fully Coded in HTML5</h3>
+                    <h3 className="info-title">Comida</h3>
                     <p className="description">
-                      We've developed the website with HTML5 and CSS3. The
-                      client has access to the code using GitHub.
+                      Solo en el cine puedes disfrutrar de la mejor Comida
+                      que nadie mas puede llegar a tener.
                     </p>
                   </div>
                 </div>
@@ -116,10 +116,9 @@ class SignUp extends React.Component {
                     <i className="tim-icons icon-trophy" />
                   </div>
                   <div className="description">
-                    <h3 className="info-title">Built Audience</h3>
+                    <h3 className="info-title">Soporte</h3>
                     <p className="description">
-                      There is also a Fully Customizable CMS Admin Dashboard for
-                      this product.
+                      Contamos con el mas grande soporte de todos los cines. Llamanos te atendemos.
                     </p>
                   </div>
                 </div>
@@ -131,7 +130,7 @@ class SignUp extends React.Component {
                       alt="..."
                       src={require("../assets/img/card-primary.png")}
                     />
-                    <CardTitle tag="h4">Register</CardTitle>
+                    <CardTitle tag="h4">Registrate</CardTitle>
                   </CardHeader>
                   <CardBody>
                     <Form className="form" onSubmit={this.onSubmit} href="#">
@@ -179,9 +178,9 @@ class SignUp extends React.Component {
                       <FormGroup check className="text-left">
                         <Label check>
                           <Input type="checkbox" />
-                          <span className="form-check-sign" />I agree to the{" "}
+                          <span className="form-check-sign" />Yo accepto todos los terminos{" "}
                           <a href="/" onClick={e => e.preventDefault()}>
-                            terms and conditions
+                            Terminos
                           </a>
                           .
                         </Label>
@@ -196,7 +195,7 @@ class SignUp extends React.Component {
                       href="#"
                       size="lg"
                     >
-                      Get Started
+                      Registrate
                     </Button>
                   </CardFooter>
                 </Card>

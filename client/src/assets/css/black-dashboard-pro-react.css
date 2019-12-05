@@ -4688,8 +4688,14 @@ button.close {
   z-index: 10;
   padding-top: 20px;
   padding-bottom: 20px;
-  color: #ffffff;
-  text-align: center; }
+  /*color: #ffffff;*/
+  text-align: center; 
+
+  font-size: 6rem;
+  font-family: Cookie;
+  opacity: 0.7;
+  color: whitesmoke;
+}
 
 .align-baseline {
   vertical-align: baseline !important; }

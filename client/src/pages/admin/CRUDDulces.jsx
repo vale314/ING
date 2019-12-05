@@ -426,6 +426,7 @@ class CRUDDulces extends React.Component {
               <Card>
                 <CardHeader>
                   <CardTitle tag="h4">React Table</CardTitle>
+                  <CardTitle tag="h4">Dulces</CardTitle>
                 </CardHeader>
                 <CardBody>
                   <ReactTable

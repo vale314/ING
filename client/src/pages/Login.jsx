@@ -117,7 +117,7 @@ class Login extends React.Component {
                       onClick={this.onSubmit}
                       size="lg"
                     >
-                      Get Started
+                      Ingresar
                     </Button>
                     <div className="pull-left">
                       <h6>
@@ -126,7 +126,7 @@ class Login extends React.Component {
                           href="#pablo"
                           onClick={e => e.preventDefault()}
                         >
-                          Create Account
+                          Crear Cuenta
                         </a>
                       </h6>
                     </div>
@@ -137,7 +137,7 @@ class Login extends React.Component {
                           href="#pablo"
                           onClick={e => e.preventDefault()}
                         >
-                          Need Help?
+                         ¿ Nesesitas Ayuda ?
                         </a>
                       </h6>
                     </div>

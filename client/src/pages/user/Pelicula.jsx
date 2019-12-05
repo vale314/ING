@@ -167,7 +167,7 @@ class Pelicula extends Component{
                             <Col md="8">
                             <TabContent activeTab={this.state.verticalTabsIcons}>
                                 <TabPane tabId="home">
-                                {sinapsis}
+                                <h4 className="description"> {sinapsis} </h4>
                                 <br />
                                 Categoria : {categoria}
                                 <br />
