@@ -65,7 +65,7 @@ class Index extends React.Component {
                   opacity: '0.5',
                 }}></div>
                 <video autoPlay loop muted style={{width: "inherit"}}>
-                  <source type="video/mp4" src="http://localhost:5000/video" />
+                  <source type="video/mp4" src="https://cineco.herokuapp.com/video" />
                 </video>
             </div>
 
