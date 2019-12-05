@@ -75,7 +75,7 @@ class Index extends React.Component {
               <Col className="ml-auto mr-auto text-center" md="6">
                 <br />
 
-                <h1 className="title">
+                <h1 className="title" style={{color: "red"}}>
                 <div className="icon icon-info" style={{display: 'inline'}}>
                     <i className="tim-icons icon-trophy" />
                   </div>
