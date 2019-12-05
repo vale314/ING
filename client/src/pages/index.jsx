@@ -65,7 +65,7 @@ class Index extends React.Component {
                   opacity: '0.5',
                 }}></div>
                 <video autoPlay loop muted style={{width: "inherit"}}>
-                  <source type="video/mp4" src="https://filebin.net/7ophcbtjspzsfflv/compress.mp4?t=t3cajtbj" />
+                  <source type="video/mp4" src="https://filebin.net/7ophcbtjspzsfflv/compress.mp4?t=61gbgeab" />
                 </video>
             </div>
 
